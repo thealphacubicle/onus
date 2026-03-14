@@ -53,6 +53,7 @@ export async function addPaymentMethod(
   }
 
   revalidatePath("/profile");
+  revalidatePath("/add-payment");
   return {};
 }
 

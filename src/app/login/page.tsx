@@ -9,10 +9,10 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get("redirect");
-  // Sign up goes directly to dashboard; sign in goes to redirect param or dashboard
-  const getRedirectAfterAuth = (isSignUp: boolean) => {
-    if (isSignUp) return "/dashboard";
-    return redirectParam ?? "/dashboard";
+  // Always go to add-payment first — it redirects to dashboard/onboarding if payment on file
+  const getRedirectAfterAuth = () => {
+    if (!redirectParam || redirectParam === "/add-payment") return "/add-payment";
+    return `/add-payment?redirect=${encodeURIComponent(redirectParam)}`;
   };
 
   const [isSignUp, setIsSignUp] = useState(false);
@@ -36,11 +36,11 @@ function LoginForm() {
           password,
           options: {
             data: { full_name: name },
-            emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=/add-payment`,
           },
         });
         if (signUpError) throw signUpError;
-        router.push(getRedirectAfterAuth(true));
+        router.push(getRedirectAfterAuth());
         router.refresh();
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -48,7 +48,7 @@ function LoginForm() {
           password,
         });
         if (signInError) throw signInError;
-        router.push(getRedirectAfterAuth(false));
+        router.push(getRedirectAfterAuth());
         router.refresh();
       }
     } catch (err: unknown) {

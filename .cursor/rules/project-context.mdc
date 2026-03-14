@@ -1,0 +1,44 @@
+---
+description: Core project context - tech stack, conventions, folder structure
+alwaysApply: true
+---
+
+# Onus Project Context
+
+## Tech Stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- shadcn/ui (dark theme)
+- Supabase (mocked for now)
+- Anthropic/Claude API (mocked for now)
+- Framer Motion (page transitions)
+
+## Folder Structure
+
+```
+src/
+  app/           # Routes: page.tsx, onboarding/, dashboard/, history/, rewards/
+  components/
+    ui/          # shadcn components
+    layout/      # Sidebar, Navbar
+    dashboard/   # StatsRow, WeekView, CoachingCard, PaktCard
+    onboarding/  # TierSelect, GoalBuilder, ContractSummary
+  lib/
+    mock-data.ts # All mocked data
+    types.ts     # User, Commitment, Session, Penalty interfaces
+```
+
+## Design Tokens
+
+- Background: #0e0e10 (primary), #131315 (surface), #1a1a1d (card)
+- Accent: #c8f060 (lime green - CTAs, highlights)
+- Text: #f0efe8 (primary), rgba(240,239,232,0.45) (muted)
+- Danger: #f07070 (penalties, missed sessions)
+- Border: rgba(255,255,255,0.07)
+
+## Fonts
+
+- Geist Sans: UI text
+- Geist Mono: Currency, numbers, penalties

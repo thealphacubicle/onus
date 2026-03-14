@@ -7,21 +7,69 @@ export const TIERS: Tier[] = [
     priceMonthly: 2.99,
     penaltyPerMiss: 5,
     firstMonthFree: true,
-    description: "Perfect for getting started. Low commitment, low penalty.",
+    description: "For building the habit. Low stakes to start — but the commitment is still real.",
   },
   {
     id: "committed",
     name: "Committed",
     priceMonthly: 4.99,
     penaltyPerMiss: 10,
-    description: "For those ready to get serious. Balanced stakes.",
+    description: "For people ready to stop making excuses. This is where most members start.",
   },
   {
     id: "dedicated",
     name: "Dedicated",
     priceMonthly: 10.99,
     penaltyPerMiss: 20,
-    description: "Maximum accountability. No excuses.",
+    description: "For when you're done playing around. Highest stakes, highest rewards.",
+  },
+];
+
+export interface PricingTierDetail {
+  id: Tier["id"];
+  badge: string;
+  goalRange: string;
+  graceSessions: string;
+  aiCoaching: string;
+  rewardRate: string;
+  rewardCap: string;
+  ctaText: string;
+  ctaVariant: "accent" | "outline";
+}
+
+export const PRICING_TIER_DETAILS: PricingTierDetail[] = [
+  {
+    id: "starter",
+    badge: "First month free",
+    goalRange: "1–2 sessions/week",
+    graceSessions: "4/month",
+    aiCoaching: "Goal builder only",
+    rewardRate: "0.5×",
+    rewardCap: "—",
+    ctaText: "Try free",
+    ctaVariant: "accent",
+  },
+  {
+    id: "committed",
+    badge: "Most popular",
+    goalRange: "3–4 sessions/week",
+    graceSessions: "3/month",
+    aiCoaching: "Weekly check-in",
+    rewardRate: "1×",
+    rewardCap: "—",
+    ctaText: "Get started",
+    ctaVariant: "accent",
+  },
+  {
+    id: "dedicated",
+    badge: "Highest stakes",
+    goalRange: "5–7 sessions/week",
+    graceSessions: "2/month",
+    aiCoaching: "Daily coaching + pushback",
+    rewardRate: "2×",
+    rewardCap: "—",
+    ctaText: "Get started",
+    ctaVariant: "accent",
   },
 ];
 
@@ -226,7 +274,63 @@ export interface PartnerDetails {
 
 export const LANDING_PARTNERS: PartnerDetails[] = [
   {
-    name: "WHOOP",
+    name: "Planet Fitness",
+    category: "GYM",
+    domain: "planetfitness.com",
+    description: "Planet Fitness offers affordable gym access with locations nationwide.",
+    partnership: "Apply your Onus rewards directly to your Planet Fitness membership dues each month.",
+    rewards: "Earn rewards when you show up. Use them to offset your monthly gym fees at participating locations.",
+  },
+  {
+    name: "Equinox",
+    category: "GYM",
+    domain: "equinox.com",
+    description: "Equinox offers premium fitness clubs with world-class facilities and programming.",
+    partnership: "Apply your Onus rewards toward Equinox membership and class packages.",
+    rewards: "Earn rewards when you show up. Redeem for membership credits at participating locations.",
+  },
+  {
+    name: "Anytime Fitness",
+    category: "GYM",
+    domain: "anytimefitness.com",
+    description: "Anytime Fitness provides 24/7 gym access at thousands of locations worldwide.",
+    partnership: "Apply your Onus rewards to your Anytime Fitness membership each month.",
+    rewards: "Earn rewards when you show up. Use them to offset your monthly dues.",
+  },
+  {
+    name: "MyProtein",
+    category: "NUTRITION",
+    domain: "myprotein.com",
+    description: "MyProtein offers protein powders, supplements, and nutrition products.",
+    partnership: "Redeem Onus rewards for MyProtein credit to fuel your gains.",
+    rewards: "Earn rewards when you show up. Shop protein and supplements at a discount.",
+  },
+  {
+    name: "Thorne",
+    category: "NUTRITION",
+    domain: "thorne.com",
+    description: "Thorne provides science-backed supplements and wellness products.",
+    partnership: "Redeem Onus rewards for Thorne credit on supplements and vitamins.",
+    rewards: "Earn rewards when you show up. Invest in your recovery and performance.",
+  },
+  {
+    name: "AG1",
+    category: "NUTRITION",
+    domain: "drinkag1.com",
+    description: "AG1 is a daily nutritional supplement with vitamins, minerals, and superfoods.",
+    partnership: "Redeem Onus rewards for AG1 subscriptions and one-time purchases.",
+    rewards: "Earn rewards when you show up. Fuel your body with daily nutrition.",
+  },
+  {
+    name: "GNC",
+    category: "NUTRITION",
+    domain: "gnc.com",
+    description: "GNC offers supplements, vitamins, and sports nutrition products.",
+    partnership: "Redeem Onus rewards for GNC credit on supplements and gear.",
+    rewards: "Earn rewards when you show up. Shop supplements at participating stores.",
+  },
+  {
+    name: "Whoop",
     category: "DEVICE",
     domain: "whoop.com",
     description: "WHOOP is a wearable fitness tracker that monitors strain, recovery, and sleep.",
@@ -234,28 +338,77 @@ export const LANDING_PARTNERS: PartnerDetails[] = [
     rewards: "Earn rewards for consistent check-ins. Redeem for WHOOP accessories or membership credits.",
   },
   {
-    name: "Apple Health",
+    name: "Fitbit",
     category: "DEVICE",
-    domain: "apple.com",
-    description: "Apple Health aggregates your fitness data from iPhone, Apple Watch, and compatible apps.",
-    partnership: "We read workout data from Apple Health to verify your gym sessions. One tap to confirm after your workout.",
-    rewards: "Consistent members earn rewards redeemable for Apple gift cards and Health-compatible accessories.",
+    domain: "fitbit.com",
+    description: "Fitbit offers fitness trackers and smartwatches to monitor your activity.",
+    partnership: "Connect Fitbit to verify workouts. Check in and your data helps confirm your session.",
+    rewards: "Earn rewards when you show up. Redeem for Fitbit devices and accessories.",
   },
   {
-    name: "Spotify",
-    category: "MUSIC",
-    domain: "spotify.com",
-    description: "Spotify brings music and podcasts to your workouts with millions of tracks and playlists.",
-    partnership: "Hit your weekly goals and unlock Spotify Premium credits. We partner to reward your consistency.",
-    rewards: "Redeem earned rewards for Spotify Premium months — music that keeps you moving.",
+    name: "Garmin",
+    category: "DEVICE",
+    domain: "garmin.com",
+    description: "Garmin makes GPS watches and fitness trackers for athletes.",
+    partnership: "Connect Garmin to verify workouts. Your activity data helps confirm your session.",
+    rewards: "Earn rewards when you show up. Redeem for Garmin devices and accessories.",
   },
   {
-    name: "Planet Fitness",
-    category: "GYM",
-    domain: "planetfitness.com",
-    description: "Planet Fitness offers affordable gym access with locations nationwide.",
-    partnership: "Apply your Onus rewards directly to your Planet Fitness membership dues each month.",
-    rewards: "Earn rewards when you show up. Use them to offset your monthly gym fees at participating locations.",
+    name: "Amazon",
+    category: "GIFT CARD",
+    domain: "amazon.com",
+    description: "Amazon offers millions of products for fitness, gear, and everyday needs.",
+    partnership: "Redeem Onus rewards for Amazon gift cards. Spend on whatever you need.",
+    rewards: "Earn rewards when you show up. Get Amazon credit to use anywhere.",
+  },
+  {
+    name: "Target",
+    category: "GIFT CARD",
+    domain: "target.com",
+    description: "Target offers fitness gear, apparel, and everyday essentials.",
+    partnership: "Redeem Onus rewards for Target gift cards. Shop gear and more.",
+    rewards: "Earn rewards when you show up. Get Target credit for your next haul.",
+  },
+  {
+    name: "Nike",
+    category: "GEAR",
+    domain: "nike.com",
+    description: "Nike offers athletic footwear, apparel, and equipment for every sport.",
+    partnership: "Redeem Onus rewards for Nike credit. Gear up for your next workout.",
+    rewards: "Earn rewards when you show up. Get Nike credit for shoes and apparel.",
+  },
+];
+
+export const PRICING_PAGE_FAQ = [
+  {
+    id: "faq-1",
+    question: "What happens if I have a legitimate emergency?",
+    answer:
+      "That's what grace sessions are for. Each tier comes with a set number per month that reset automatically. Beyond that, the commitment stands.",
+  },
+  {
+    id: "faq-2",
+    question: "How does check-in verification work?",
+    answer:
+      "Onus uses geolocation to confirm you were physically at your gym. You can't check in from your couch.",
+  },
+  {
+    id: "faq-3",
+    question: "Where does my penalty money go?",
+    answer:
+      "A portion funds the rewards pool for consistent members. The rest covers platform costs. Nobody profits from your failure — we'd rather you show up.",
+  },
+  {
+    id: "faq-4",
+    question: "Can I change my tier?",
+    answer:
+      "Yes, at the end of each monthly cycle. You can upgrade or downgrade based on how the previous month went.",
+  },
+  {
+    id: "faq-5",
+    question: "What if my gym isn't supported for rewards?",
+    answer:
+      "You can still redeem rewards for supplements, smart devices, and gift cards regardless of which gym you attend.",
   },
 ];
 

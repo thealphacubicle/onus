@@ -22,7 +22,7 @@ export function Navbar({ variant = "landing", userName, streak = 0 }: NavbarProp
               href="/how-it-works"
               className="text-sm text-[rgba(240,239,232,0.8)] transition-colors hover:text-[#f0efe8]"
             >
-              How it Works
+              How it works
             </Link>
             <Link
               href="/pricing"

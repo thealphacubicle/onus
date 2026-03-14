@@ -81,8 +81,7 @@ export function PartnerScrollSection() {
           Rewards you can actually use
         </h2>
         <p className="mt-2 text-[15px] text-[rgba(240,239,232,0.6)]">
-          Consistent members earn rewards redeemable with our partners. Click a
-          logo to learn more.
+          Show up consistently. Watch the rewards add up.
         </p>
 
         <div className="relative mt-10 overflow-hidden">
@@ -100,9 +99,9 @@ export function PartnerScrollSection() {
           <div
             className={`flex animate-marquee items-center gap-14 ${selectedPartner ? "animate-marquee-paused" : ""}`}
           >
-            {[...LANDING_PARTNERS, ...LANDING_PARTNERS].map((partner, i) => (
+            {LANDING_PARTNERS.map((partner) => (
               <PartnerLogo
-                key={`${partner.domain}-${i}`}
+                key={partner.domain}
                 partner={partner}
                 onClick={() => setSelectedPartner(partner)}
               />

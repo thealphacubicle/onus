@@ -44,6 +44,16 @@ export interface Penalty {
   refunded: boolean;
 }
 
+export interface PaymentMethod {
+  id: string;
+  user_id: string;
+  last4: string;
+  brand: string;
+  exp_month: number;
+  exp_year: number;
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -72,6 +82,14 @@ export interface Database {
         Row: Penalty;
         Insert: Omit<Penalty, "id"> & { id?: string };
         Update: Partial<Omit<Penalty, "id" | "user_id">>;
+      };
+      payment_methods: {
+        Row: PaymentMethod;
+        Insert: Omit<PaymentMethod, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<PaymentMethod, "id" | "user_id">>;
       };
     };
   };

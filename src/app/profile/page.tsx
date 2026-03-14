@@ -54,28 +54,35 @@ export default async function ProfilePage() {
   let email = user.email ?? "";
   let commitment: Commitment = toUiCommitment(null);
   let streak = 0;
+  let paymentMethods: { id: string; last4: string; brand: string; exp_month: number; exp_year: number }[] = [];
 
   try {
-    const [profileRes, commitRes, sessionsRes] = await Promise.all([
-      supabase
-        .from("profiles")
-        .select("full_name, email")
-        .eq("id", user.id)
-        .maybeSingle(),
-      supabase
-        .from("commitments")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("active", true)
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from("sessions")
-        .select("scheduled_date, checked_in, missed")
-        .eq("user_id", user.id)
-        .order("scheduled_date", { ascending: false })
-        .limit(200),
-    ]);
+    const [profileRes, commitRes, sessionsRes, paymentMethodsRes] =
+      await Promise.all([
+        supabase
+          .from("profiles")
+          .select("full_name, email")
+          .eq("id", user.id)
+          .maybeSingle(),
+        supabase
+          .from("commitments")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("active", true)
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from("sessions")
+          .select("scheduled_date, checked_in, missed")
+          .eq("user_id", user.id)
+          .order("scheduled_date", { ascending: false })
+          .limit(200),
+        supabase
+          .from("payment_methods")
+          .select("id, last4, brand, exp_month, exp_year")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+      ]);
 
     if (profileRes.data) {
       fullName = profileRes.data.full_name ?? fullName;
@@ -86,6 +93,7 @@ export default async function ProfilePage() {
       commitment = toUiCommitment(commitRes.data);
     }
 
+    paymentMethods = paymentMethodsRes.data ?? [];
     const sessions = sessionsRes.data ?? [];
     const byWeek = new Map<string, typeof sessions>();
     for (const s of sessions) {
@@ -116,6 +124,7 @@ export default async function ProfilePage() {
       email={email}
       commitment={commitment}
       streak={streak}
+      paymentMethods={paymentMethods}
     />
   );
 }

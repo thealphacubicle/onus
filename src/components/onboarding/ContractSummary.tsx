@@ -1,15 +1,19 @@
 "use client";
 
-import type { Commitment } from "@/lib/types";
-import { TIERS } from "@/lib/mock-data";
+import type { Commitment, Tier } from "@/lib/types";
 
 interface ContractSummaryProps {
   commitment: Commitment;
+  tiers: Tier[];
   onConfirm: () => void;
 }
 
-export function ContractSummary({ commitment, onConfirm }: ContractSummaryProps) {
-  const tier = TIERS.find((t) => t.id === commitment.tierId);
+export function ContractSummary({
+  commitment,
+  tiers,
+  onConfirm,
+}: ContractSummaryProps) {
+  const tier = tiers.find((t) => t.id === commitment.tierId);
 
   return (
     <div className="mx-auto max-w-lg rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-8">

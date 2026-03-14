@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
-import {
-  TIERS,
-  PRICING_TIER_DETAILS,
-  PRICING_PAGE_FAQ,
-} from "@/lib/mock-data";
+import { PRICING_PAGE_FAQ } from "@/lib/mock-data";
+import { getTiers } from "@/lib/tiers";
 import { PricingFAQ } from "@/components/pricing/PricingFAQ";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const { tiers, pricingDetails } = await getTiers();
   const getDetail = (id: string) =>
-    PRICING_TIER_DETAILS.find((t) => t.id === id)!;
+    pricingDetails.find((t) => t.id === id)!;
 
   return (
     <div className="min-h-screen bg-[#0e0e10]">
@@ -26,13 +29,19 @@ export default function PricingPage() {
           </p>
         </section>
 
-        {/* Pricing cards */}
+        {/* Pricing cards — 2×2 grid for breathing room */}
         <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#0e0e10] py-20">
-          <div className="mx-auto max-w-5xl px-6">
-            <div className="grid gap-6 sm:grid-cols-3">
-              {TIERS.map((tier) => {
+          <div className="mx-auto max-w-4xl px-6">
+            <div className="grid grid-cols-2 gap-8">
+              {tiers.map((tier) => {
                 const detail = getDetail(tier.id);
                 const isAccent = detail.ctaVariant === "accent";
+                const badgeClass =
+                  detail.badgeVariant === "green"
+                    ? "bg-[#c8f060]/20 text-[#c8f060]"
+                    : detail.badgeVariant === "blue"
+                      ? "bg-blue-500/20 text-blue-400"
+                      : "bg-amber-500/20 text-amber-400";
                 return (
                   <div
                     key={tier.id}
@@ -42,7 +51,9 @@ export default function PricingPage() {
                       <h2 className="text-lg font-medium text-[#f0efe8]">
                         {tier.name}
                       </h2>
-                      <span className="rounded-md bg-[#c8f060]/20 px-2 py-0.5 text-xs font-medium text-[#c8f060]">
+                      <span
+                        className={`rounded-md px-2 py-0.5 text-xs font-medium ${badgeClass}`}
+                      >
                         {detail.badge}
                       </span>
                     </div>
@@ -75,15 +86,43 @@ export default function PricingPage() {
                       </p>
                       <p>
                         <span className="text-[rgba(240,239,232,0.45)]">
+                          Reward rate:
+                        </span>{" "}
+                        {detail.rewardRate}
+                      </p>
+                      <p>
+                        <span className="text-[rgba(240,239,232,0.45)]">
+                          Monthly reward cap:
+                        </span>{" "}
+                        {detail.rewardCap}
+                      </p>
+                      <p>
+                        <span className="text-[rgba(240,239,232,0.45)]">
                           AI coaching:
                         </span>{" "}
                         {detail.aiCoaching}
                       </p>
                       <p>
                         <span className="text-[rgba(240,239,232,0.45)]">
-                          Reward rate:
+                          Weekly check-in:
                         </span>{" "}
-                        {detail.rewardRate}
+                        {detail.weeklyCheckIn === true
+                          ? "Yes"
+                          : detail.weeklyCheckIn === false
+                            ? "No"
+                            : "N/A"}
+                      </p>
+                      <p>
+                        <span className="text-[rgba(240,239,232,0.45)]">
+                          Monthly review:
+                        </span>{" "}
+                        {detail.monthlyReview ? "Yes" : "No"}
+                      </p>
+                      <p>
+                        <span className="text-[rgba(240,239,232,0.45)]">
+                          Onus One eligible:
+                        </span>{" "}
+                        {detail.onusOneEligible}
                       </p>
                     </div>
                     <Link
@@ -99,6 +138,106 @@ export default function PricingPage() {
                   </div>
                 );
               })}
+              {/* Onus One card — not selectable */}
+              <div className="rounded-[10px] border border-[rgba(180,83,9,0.6)] bg-[#1a1a1d] p-6">
+                <div className="flex items-start justify-between">
+                  <h2 className="text-lg font-medium text-[#f0efe8]">
+                    Onus One
+                  </h2>
+                  <span className="rounded-md bg-[#fef3c7] px-2 py-0.5 text-xs font-medium text-[#92400e]">
+                    Earned, not bought
+                  </span>
+                </div>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="font-mono text-2xl font-medium text-[#f0efe8]">
+                    $4.50
+                  </span>
+                  <span className="text-sm text-[rgba(240,239,232,0.6)]">
+                    /mo
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-[rgba(240,239,232,0.45)]">
+                  Earned after 180 days. $4.50/mo — the lowest you&apos;ll ever
+                  pay, with the highest reward rate.
+                </p>
+                <div className="mt-4 rounded-md bg-[#fef3c7] p-3">
+                  <p className="text-xs font-medium text-[#92400e]">
+                    Status accountability
+                  </p>
+                  <p className="mt-0.5 text-sm font-medium text-[#92400e]">
+                    No per-session penalty
+                  </p>
+                  <p className="mt-0.5 text-xs text-[#92400e]">
+                    5 missed goals = demotion
+                  </p>
+                </div>
+                <div className="mt-4 space-y-2 text-sm text-[rgba(240,239,232,0.7)]">
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Grace sessions:
+                    </span>{" "}
+                    <span className="text-[#b45309] font-medium">
+                      5/month
+                    </span>
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Reward rate:
+                    </span>{" "}
+                    <span className="text-[#b45309] font-medium">
+                      2× permanent
+                    </span>
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Monthly reward cap:
+                    </span>{" "}
+                    $4.50
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      AI coaching:
+                    </span>{" "}
+                    Daily + insights
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Weekly check-in:
+                    </span>{" "}
+                    Yes
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Monthly review:
+                    </span>{" "}
+                    Yes
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Community access:
+                    </span>{" "}
+                    Admin — optional mentor
+                  </p>
+                  <p>
+                    <span className="text-[rgba(240,239,232,0.45)]">
+                      Demotion trigger:
+                    </span>{" "}
+                    5 missed goals
+                  </p>
+                </div>
+                <Tooltip>
+                  <TooltipTrigger
+                    aria-disabled="true"
+                    tabIndex={-1}
+                    className="mt-6 block w-full rounded-lg border border-[rgba(255,255,255,0.12)] bg-transparent py-2.5 text-center text-sm font-medium text-[rgba(240,239,232,0.5)] cursor-not-allowed"
+                  >
+                    Available after 180 days
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Keep showing up. This finds you.
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             </div>
           </div>
         </section>
@@ -106,7 +245,7 @@ export default function PricingPage() {
         {/* Feature comparison table */}
         <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#131315] py-20">
           <div className="mx-auto max-w-5xl overflow-x-auto px-6">
-            <table className="w-full min-w-[500px] border-collapse text-left">
+            <table className="w-full min-w-[600px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <th className="py-4 pr-6 text-sm font-medium text-[rgba(240,239,232,0.45)]">
@@ -121,6 +260,9 @@ export default function PricingPage() {
                   <th className="py-4 px-6 text-sm font-medium text-[#f0efe8]">
                     Dedicated
                   </th>
+                  <th className="py-4 px-6 text-sm font-medium text-[#b45309]">
+                    Onus One
+                  </th>
                 </tr>
               </thead>
               <tbody className="text-sm text-[rgba(240,239,232,0.8)]">
@@ -128,9 +270,10 @@ export default function PricingPage() {
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
                     Monthly price
                   </td>
-                  <td className="py-4 px-6 font-mono">$2.99</td>
-                  <td className="py-4 px-6 font-mono">$4.99</td>
-                  <td className="py-4 px-6 font-mono">$10.99</td>
+                  <td className="py-4 px-6 font-mono">$3.50</td>
+                  <td className="py-4 px-6 font-mono">$5.50</td>
+                  <td className="py-4 px-6 font-mono">$10.50</td>
+                  <td className="py-4 px-6 font-mono">$4.50</td>
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
@@ -139,6 +282,7 @@ export default function PricingPage() {
                   <td className="py-4 px-6 font-mono">$5</td>
                   <td className="py-4 px-6 font-mono">$10</td>
                   <td className="py-4 px-6 font-mono">$20</td>
+                  <td className="py-4 px-6">No per-session</td>
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
@@ -147,6 +291,7 @@ export default function PricingPage() {
                   <td className="py-4 px-6">1–2</td>
                   <td className="py-4 px-6">3–4</td>
                   <td className="py-4 px-6">5–7</td>
+                  <td className="py-4 px-6">—</td>
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
@@ -155,11 +300,13 @@ export default function PricingPage() {
                   <td className="py-4 px-6">4</td>
                   <td className="py-4 px-6">3</td>
                   <td className="py-4 px-6">2</td>
+                  <td className="py-4 px-6">5</td>
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
                     AI goal builder
                   </td>
+                  <td className="py-4 px-6">Yes</td>
                   <td className="py-4 px-6">Yes</td>
                   <td className="py-4 px-6">Yes</td>
                   <td className="py-4 px-6">Yes</td>
@@ -171,12 +318,14 @@ export default function PricingPage() {
                   <td className="py-4 px-6">Goal builder only</td>
                   <td className="py-4 px-6">Weekly check-in</td>
                   <td className="py-4 px-6">Daily coaching + pushback</td>
+                  <td className="py-4 px-6">Daily + insights</td>
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
-                    Reward earning rate
+                    Reward rate
                   </td>
                   <td className="py-4 px-6 font-mono">0.5×</td>
+                  <td className="py-4 px-6 font-mono">0.75×</td>
                   <td className="py-4 px-6 font-mono">1×</td>
                   <td className="py-4 px-6 font-mono">2×</td>
                 </tr>
@@ -184,9 +333,37 @@ export default function PricingPage() {
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
                     Monthly reward cap
                   </td>
+                  <td className="py-4 px-6">$1.50</td>
+                  <td className="py-4 px-6">$3.00</td>
+                  <td className="py-4 px-6">$6.00</td>
+                  <td className="py-4 px-6">$4.50</td>
+                </tr>
+                <tr className="border-b border-[rgba(255,255,255,0.07)]">
+                  <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
+                    Monthly review
+                  </td>
+                  <td className="py-4 px-6">No</td>
+                  <td className="py-4 px-6">No</td>
+                  <td className="py-4 px-6">Yes</td>
+                  <td className="py-4 px-6">Yes</td>
+                </tr>
+                <tr className="border-b border-[rgba(255,255,255,0.07)]">
+                  <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
+                    Community access
+                  </td>
                   <td className="py-4 px-6">—</td>
                   <td className="py-4 px-6">—</td>
                   <td className="py-4 px-6">—</td>
+                  <td className="py-4 px-6">Admin — optional mentor</td>
+                </tr>
+                <tr className="border-b border-[rgba(255,255,255,0.07)]">
+                  <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
+                    Onus One eligible / How to qualify
+                  </td>
+                  <td className="py-4 px-6">Yes — after 180 days</td>
+                  <td className="py-4 px-6">Yes — after 180 days</td>
+                  <td className="py-4 px-6">Yes — after 180 days</td>
+                  <td className="py-4 px-6">Invitation only — 180 days</td>
                 </tr>
               </tbody>
             </table>

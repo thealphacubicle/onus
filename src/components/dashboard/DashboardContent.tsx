@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { DayStatus } from "@/components/dashboard/WeekView";
-import type { Commitment } from "@/lib/types";
+import type { Commitment, Tier } from "@/lib/types";
 
 interface DayData {
   date: string;
@@ -32,6 +32,7 @@ interface DashboardContentProps {
   rewardsEarned: number;
   weekDays: DayData[];
   commitment: Commitment;
+  tiers: Tier[];
   coachingMessage: string;
 }
 
@@ -44,6 +45,7 @@ export function DashboardContent({
   rewardsEarned,
   weekDays,
   commitment,
+  tiers,
   coachingMessage,
 }: DashboardContentProps) {
   const [checkInOpen, setCheckInOpen] = useState(false);
@@ -70,7 +72,11 @@ export function DashboardContent({
             <CoachingCard message={coachingMessage} />
           </div>
           <div className="mt-6">
-            <PaktCard commitment={commitment} canCheckIn={hasToday} />
+            <PaktCard
+              commitment={commitment}
+              tiers={tiers}
+              canCheckIn={hasToday}
+            />
           </div>
         </main>
       </div>

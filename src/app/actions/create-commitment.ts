@@ -85,5 +85,5 @@ export async function createCommitment(formData: {
 
   await supabase.from("sessions").insert(sessions);
 
-  redirect("/dashboard");
+  redirect("/add-payment");
 }

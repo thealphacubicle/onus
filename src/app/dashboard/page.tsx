@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { MOCK_COACHING_MESSAGE } from "@/lib/mock-data";
+import { getSelectableTiers } from "@/lib/tiers";
 import type { Commitment } from "@/lib/types";
 import type { DayStatus } from "@/components/dashboard/WeekView";
 
@@ -84,6 +85,7 @@ function toUiCommitment(
 
 export default async function DashboardPage() {
   const supabase = await createClient();
+  const tiers = await getSelectableTiers();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -205,6 +207,7 @@ export default async function DashboardPage() {
       rewardsEarned={rewardsEarned}
       weekDays={weekDays}
       commitment={commitment ?? toUiCommitment(null)}
+      tiers={tiers}
       coachingMessage={MOCK_COACHING_MESSAGE}
     />
   );

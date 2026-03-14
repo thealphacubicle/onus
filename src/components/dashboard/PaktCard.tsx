@@ -1,15 +1,19 @@
 "use client";
 
-import type { Commitment } from "@/lib/types";
-import { TIERS } from "@/lib/mock-data";
+import type { Commitment, Tier } from "@/lib/types";
 
 interface PaktCardProps {
   commitment: Commitment;
+  tiers: Tier[];
   canCheckIn?: boolean;
 }
 
-export function PaktCard({ commitment, canCheckIn = true }: PaktCardProps) {
-  const tier = TIERS.find((t) => t.id === commitment.tierId);
+export function PaktCard({
+  commitment,
+  tiers,
+  canCheckIn = true,
+}: PaktCardProps) {
+  const tier = tiers.find((t) => t.id === commitment.tierId);
 
   return (
     <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">

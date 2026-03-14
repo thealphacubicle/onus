@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
-import { TIERS } from "@/lib/mock-data";
-import type { Commitment } from "@/lib/types";
+import type { Commitment, Tier } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,6 +44,7 @@ interface ProfileContentProps {
   fullName: string;
   email: string;
   commitment: Commitment;
+  tiers: Tier[];
   streak: number;
   paymentMethods: PaymentMethodDisplay[];
 }
@@ -69,10 +69,11 @@ export function ProfileContent({
   fullName,
   email,
   commitment,
+  tiers,
   streak,
   paymentMethods,
 }: ProfileContentProps) {
-  const tier = TIERS.find((t) => t.id === commitment.tierId);
+  const tier = tiers.find((t) => t.id === commitment.tierId);
   const firstName = fullName?.split(" ")[0] ?? "there";
 
   const [addCardOpen, setAddCardOpen] = useState(false);

@@ -4,7 +4,7 @@ export const TIERS: Tier[] = [
   {
     id: "starter",
     name: "Starter",
-    priceMonthly: 2.99,
+    priceMonthly: 3.5,
     penaltyPerMiss: 5,
     firstMonthFree: true,
     description: "For building the habit. Low stakes to start — but the commitment is still real.",
@@ -12,27 +12,31 @@ export const TIERS: Tier[] = [
   {
     id: "committed",
     name: "Committed",
-    priceMonthly: 4.99,
+    priceMonthly: 5.5,
     penaltyPerMiss: 10,
-    description: "For people ready to stop making excuses. This is where most members start.",
+    description: "For people ready to stop making excuses. Earn 0.75× rewards on every session you show up for.",
   },
   {
     id: "dedicated",
     name: "Dedicated",
-    priceMonthly: 10.99,
+    priceMonthly: 10.5,
     penaltyPerMiss: 20,
-    description: "For when you're done playing around. Highest stakes, highest rewards.",
+    description: "For when you're done playing around. Earn 1× rewards — one dollar back for every dollar your subscription costs.",
   },
 ];
 
 export interface PricingTierDetail {
   id: Tier["id"];
   badge: string;
+  badgeVariant: "green" | "blue" | "amber";
   goalRange: string;
   graceSessions: string;
   aiCoaching: string;
   rewardRate: string;
   rewardCap: string;
+  weeklyCheckIn: boolean | "n/a";
+  monthlyReview: boolean;
+  onusOneEligible: string;
   ctaText: string;
   ctaVariant: "accent" | "outline";
 }
@@ -41,33 +45,45 @@ export const PRICING_TIER_DETAILS: PricingTierDetail[] = [
   {
     id: "starter",
     badge: "First month free",
+    badgeVariant: "green",
     goalRange: "1–2 sessions/week",
     graceSessions: "4/month",
     aiCoaching: "Goal builder only",
     rewardRate: "0.5×",
-    rewardCap: "—",
+    rewardCap: "$1.50",
+    weeklyCheckIn: false,
+    monthlyReview: false,
+    onusOneEligible: "Yes — after 180 days",
     ctaText: "Try free",
     ctaVariant: "accent",
   },
   {
     id: "committed",
     badge: "Most popular",
+    badgeVariant: "blue",
     goalRange: "3–4 sessions/week",
     graceSessions: "3/month",
     aiCoaching: "Weekly check-in",
-    rewardRate: "1×",
-    rewardCap: "—",
+    rewardRate: "0.75×",
+    rewardCap: "$3.00",
+    weeklyCheckIn: true,
+    monthlyReview: false,
+    onusOneEligible: "Yes — after 180 days",
     ctaText: "Get started",
     ctaVariant: "accent",
   },
   {
     id: "dedicated",
     badge: "Highest stakes",
+    badgeVariant: "amber",
     goalRange: "5–7 sessions/week",
     graceSessions: "2/month",
     aiCoaching: "Daily coaching + pushback",
-    rewardRate: "2×",
-    rewardCap: "—",
+    rewardRate: "1×",
+    rewardCap: "$6.00",
+    weeklyCheckIn: "n/a",
+    monthlyReview: true,
+    onusOneEligible: "Yes — after 180 days",
     ctaText: "Get started",
     ctaVariant: "accent",
   },
@@ -409,6 +425,18 @@ export const PRICING_PAGE_FAQ = [
     question: "What if my gym isn't supported for rewards?",
     answer:
       "You can still redeem rewards for supplements, smart devices, and gift cards regardless of which gym you attend.",
+  },
+  {
+    id: "faq-6",
+    question: "What is Onus One?",
+    answer:
+      "Onus One is an invitation-only membership for users who have maintained consistent attendance for 180 days. It comes with a reduced subscription, elevated rewards, and access to a community of members who've built the same habit. You can't buy it — you earn it.",
+  },
+  {
+    id: "faq-7",
+    question: "What happens if I fall off as an Onus One member?",
+    answer:
+      "Your habit tracking continues as an Onus One member. If you miss 5 goals, your status is paused and you'll be asked to choose a standard tier again. Once you've rebuilt 60 days of consistent attendance, you can apply to reinstate your Onus One status.",
   },
 ];
 

@@ -106,7 +106,7 @@ export default function HowItWorksPage() {
                   </span>
                   <p className="text-sm text-[rgba(240,239,232,0.8)]">
                     Earn points every session you complete — rate depends on your
-                    tier
+                    tier (0.5× to 2×)
                   </p>
                 </div>
                 <div className="flex gap-4">
@@ -114,8 +114,8 @@ export default function HowItWorksPage() {
                     2
                   </span>
                   <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                    Points are capped at your subscription value each month —
-                    you can&apos;t over-earn
+                    Points cap at your subscription value each month — up to
+                    2,249 pts on Dedicated
                   </p>
                 </div>
                 <div className="flex gap-4">
@@ -123,8 +123,16 @@ export default function HowItWorksPage() {
                     3
                   </span>
                   <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                    500 points unlocks your first redemption — worth $5 toward
-                    any partner reward
+                    500 points = $5.00 — your first redemption threshold
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <span className="font-mono text-lg font-medium text-[#c8f060] shrink-0">
+                    4
+                  </span>
+                  <p className="text-sm text-[rgba(240,239,232,0.8)]">
+                    Missed a session? Show up next time for 2× points — the
+                    comeback bonus
                   </p>
                 </div>
               </div>

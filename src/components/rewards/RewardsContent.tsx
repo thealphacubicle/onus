@@ -31,7 +31,7 @@ export function RewardsContent({
 
   const handleRedeem = (pts: number, dollarValue: number) => {
     toast.success(
-      `${pts.toLocaleString()} pts redeemed — $${dollarValue.toFixed(2)} credit incoming. Check your email within 24 hours.`
+      `${pts.toLocaleString()} pts redeemed · $${dollarValue.toFixed(2)} credit incoming · Check your email within 24 hours`
     );
   };
 
@@ -75,7 +75,7 @@ export function RewardsContent({
                     }
                   >
                     {onusPoints >= 500
-                      ? "Ready to redeem"
+                      ? "Ready to redeem ✓"
                       : `${pointsToNextRedemption.toLocaleString()} pts to go`}
                   </span>
                 </div>
@@ -94,11 +94,11 @@ export function RewardsContent({
             </div>
           </div>
 
-          {/* Redemption minimum notice */}
+          {/* Redemption info */}
           <div className="mt-4 rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">
             <p className="text-sm text-[rgba(240,239,232,0.7)]">
-              Minimum redemption is 500 points ($5.00 value). Points expire
-              after 12 months of inactivity.
+              500 pts = $5.00 · Points expire after 12 months inactivity · Miss
+              a session? Show up next time for 2× pts
             </p>
           </div>
 
@@ -170,9 +170,7 @@ export function RewardsContent({
                           >
                             <span className="group-hover:hidden">
                               Redeem {(category.minPts ?? 500).toLocaleString()}{" "}
-                              pts → $
-                              {(category.minPtsDollarValue ?? 5).toFixed(0)}{" "}
-                              credit
+                              pts → ${(category.minPtsDollarValue ?? 5).toFixed(2)}
                             </span>
                             <span className="hidden group-hover:inline text-[#c8f060]">
                               Integration coming soon!
@@ -206,9 +204,7 @@ export function RewardsContent({
                               >
                                 <span className="group-hover:hidden">
                                   Redeem {(category.minPts ?? 500).toLocaleString()}{" "}
-                                  pts → $
-                                  {(category.minPtsDollarValue ?? 5).toFixed(0)}{" "}
-                                  credit
+                                  pts → ${(category.minPtsDollarValue ?? 5).toFixed(2)}
                                 </span>
                                 <span className="hidden group-hover:inline text-[#c8f060]">
                                   Integration coming soon!

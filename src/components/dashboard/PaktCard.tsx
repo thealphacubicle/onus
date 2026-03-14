@@ -1,10 +1,11 @@
 "use client";
 
-import type { Commitment, Tier } from "@/lib/types";
+import type { Commitment, Tier, TierPointsConfig } from "@/lib/types";
 
 interface PaktCardProps {
   commitment: Commitment;
   tiers: Tier[];
+  tierPointsConfig?: Record<string, TierPointsConfig>;
   canCheckIn?: boolean;
   pointsEarnedThisMonth?: number;
   pointsCap?: number;
@@ -13,11 +14,13 @@ interface PaktCardProps {
 export function PaktCard({
   commitment,
   tiers,
+  tierPointsConfig = {},
   canCheckIn = true,
   pointsEarnedThisMonth = 0,
-  pointsCap = 749,
+  pointsCap = 999,
 }: PaktCardProps) {
   const tier = tiers.find((t) => t.id === commitment.tierId);
+  const pointsConfig = tierPointsConfig[commitment.tierId];
   const progressPercent = pointsCap > 0 ? Math.min(100, (pointsEarnedThisMonth / pointsCap) * 100) : 0;
 
   return (
@@ -37,8 +40,14 @@ export function PaktCard({
           ${commitment.penaltyPerMiss}
         </p>
         <p className="font-mono text-sm text-[#f0efe8]">
-          <span className="text-[rgba(240,239,232,0.45)]">Grace sessions:</span>{" "}
-          {commitment.graceSessionsRemaining} remaining
+          <span className="text-[rgba(240,239,232,0.45)]">Points rate:</span>{" "}
+          {pointsConfig?.pointsRate ?? tier?.pointsRate ?? "—"}× (
+          {pointsConfig?.pointsCapPerMonth?.toLocaleString() ?? pointsCap.toLocaleString()} pts/mo
+          cap)
+        </p>
+        <p className="font-mono text-sm text-[#f0efe8]">
+          <span className="text-[rgba(240,239,232,0.45)]">Grace remaining:</span>{" "}
+          {commitment.graceSessionsRemaining} / {commitment.graceSessionsTotal} this month
         </p>
         <p className="font-mono text-sm text-[#f0efe8]">
           <span className="text-[rgba(240,239,232,0.45)]">Points this month:</span>{" "}

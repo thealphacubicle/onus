@@ -1,21 +1,24 @@
 "use client";
 
 import { Lock } from "lucide-react";
+import type { PricingTierDetail } from "@/lib/tiers";
 import type { Tier, TierPointsConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface TierSelectProps {
   tiers: Tier[];
+  pricingDetails: PricingTierDetail[];
   tierPointsConfig: Record<string, TierPointsConfig>;
   selectedId: string | null;
   onSelect: (id: string) => void;
   recommendedId?: string | null;
 }
 
-export function TierSelect({ tiers, tierPointsConfig, selectedId, onSelect, recommendedId }: TierSelectProps) {
+export function TierSelect({ tiers, pricingDetails, tierPointsConfig, selectedId, onSelect, recommendedId }: TierSelectProps) {
   return (
     <div className="grid grid-cols-2 gap-8">
       {tiers.map((tier) => {
+        const detail = pricingDetails.find((d) => d.id === tier.id);
         const isRecommended = recommendedId === tier.id;
         return (
           <button
@@ -53,12 +56,13 @@ export function TierSelect({ tiers, tierPointsConfig, selectedId, onSelect, reco
             <p className="mt-2 font-mono text-sm text-[#f07070]">
               ${tier.penaltyPerMiss} penalty per miss
             </p>
-            <p className="mt-2 text-[11px] text-[rgba(240,239,232,0.45)]">
-              Earn up to{" "}
-              {tierPointsConfig[tier.id]?.pointsCapPerMonth.toLocaleString() ??
-                "—"}{" "}
-              pts/mo
-            </p>
+            {detail && (
+              <div className="mt-2 space-y-1 text-[11px] text-[rgba(240,239,232,0.45)]">
+                <p>
+                  Earn rate: {detail.rewardRate} · Cap: {detail.rewardCap}
+                </p>
+              </div>
+            )}
           </button>
         );
       })}

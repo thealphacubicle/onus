@@ -80,7 +80,7 @@ export default function LandingPage() {
                 <div className="flex gap-3">
                   <div className="mt-0.5 h-4 w-1 shrink-0 rounded bg-[#b45309]" />
                   <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                    $4.50/month — the least you&apos;ll ever pay on Onus
+                    $8.99/month — the least you&apos;ll ever pay on Onus
                   </p>
                 </div>
               </div>

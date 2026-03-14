@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { DayStatus } from "@/components/dashboard/WeekView";
-import type { Commitment, Tier } from "@/lib/types";
+import type { Commitment, Tier, TierPointsConfig } from "@/lib/types";
 
 interface DayData {
   date: string;
@@ -34,6 +34,7 @@ interface DashboardContentProps {
   weekDays: DayData[];
   commitment: Commitment;
   tiers: Tier[];
+  tierPointsConfig?: Record<string, TierPointsConfig>;
 }
 
 export function DashboardContent({
@@ -48,6 +49,7 @@ export function DashboardContent({
   weekDays,
   commitment,
   tiers,
+  tierPointsConfig = {},
 }: DashboardContentProps) {
   const [checkInOpen, setCheckInOpen] = useState(false);
   const hasToday = weekDays.some((d) => d.status === "today");
@@ -73,6 +75,7 @@ export function DashboardContent({
             <PaktCard
               commitment={commitment}
               tiers={tiers}
+              tierPointsConfig={tierPointsConfig}
               canCheckIn={hasToday}
               pointsEarnedThisMonth={pointsEarnedThisMonth}
               pointsCap={pointsCap}

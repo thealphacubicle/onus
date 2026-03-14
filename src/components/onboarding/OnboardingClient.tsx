@@ -6,8 +6,9 @@ import Link from "next/link";
 import { TierSelect } from "@/components/onboarding/TierSelect";
 import { GoalBuilder } from "@/components/onboarding/GoalBuilder";
 import { ContractSummary } from "@/components/onboarding/ContractSummary";
-import { MOCK_COMMITMENT, MOCK_AI_RECOMMENDED_TIER_ID } from "@/lib/mock-data";
+import { MOCK_COMMITMENT, MOCK_AI_RECOMMENDED_TIER_ID, TIERS } from "@/lib/mock-data";
 import { createCommitment } from "@/app/actions/create-commitment";
+import type { PricingTierDetail } from "@/lib/tiers";
 import type { Tier, TierId, TierPointsConfig } from "@/lib/types";
 
 const STEPS = ["Set your goal", "Choose your tier", "Commitment contract"];
@@ -16,10 +17,11 @@ const MOCK_WHY =
 
 interface OnboardingClientProps {
   tiers: Tier[];
+  pricingDetails: PricingTierDetail[];
   tierPointsConfig: Record<string, TierPointsConfig>;
 }
 
-export function OnboardingClient({ tiers, tierPointsConfig }: OnboardingClientProps) {
+export function OnboardingClient({ tiers, pricingDetails, tierPointsConfig }: OnboardingClientProps) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [selectedTierId, setSelectedTierId] = useState<TierId | null>(
@@ -48,8 +50,12 @@ export function OnboardingClient({ tiers, tierPointsConfig }: OnboardingClientPr
         ...MOCK_COMMITMENT,
         tierId: selectedTierId,
         penaltyPerMiss:
+          TIERS[selectedTierId as keyof typeof TIERS]?.penalty ??
           tiers.find((t) => t.id === selectedTierId)?.penaltyPerMiss ??
           MOCK_COMMITMENT.penaltyPerMiss,
+        graceSessionsTotal:
+          TIERS[selectedTierId as keyof typeof TIERS]?.graceSessions ??
+          MOCK_COMMITMENT.graceSessionsTotal,
       }
     : MOCK_COMMITMENT;
 
@@ -101,14 +107,15 @@ export function OnboardingClient({ tiers, tierPointsConfig }: OnboardingClientPr
             </p>
             <TierSelect
               tiers={tiers}
+              pricingDetails={pricingDetails}
               tierPointsConfig={tierPointsConfig}
               selectedId={selectedTierId}
               onSelect={(id) => setSelectedTierId(id as TierId)}
               recommendedId={MOCK_AI_RECOMMENDED_TIER_ID}
             />
             <p className="mt-6 text-center text-sm text-[rgba(240,239,232,0.45)]">
-              Every plan is eligible for Onus One. Show up for 180 days and it
-              finds you.
+              Every plan earns OnusPoints redeemable with our partners. 100 pts
+              = $1. First redemption unlocks at 500 pts.
             </p>
             <div className="mt-8 flex justify-between">
               <button

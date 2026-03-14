@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { getSelectableTiers, getTierPointsConfig } from "@/lib/tiers";
-import { MOCK_DASHBOARD_STATS } from "@/lib/mock-data";
+import { MOCK_DASHBOARD_STATS, TIERS } from "@/lib/mock-data";
 import type { Commitment } from "@/lib/types";
 import type { DayStatus } from "@/components/dashboard/WeekView";
 
@@ -61,6 +61,8 @@ function toUiCommitment(
     penalty_amount: number;
     grace_sessions_remaining: number;
     grace_sessions_total: number;
+    onus_points?: number;
+    reward_balance?: number;
   } | null
 ): Commitment {
   if (!c) {
@@ -68,9 +70,9 @@ function toUiCommitment(
       tierId: "committed",
       goal: "No active commitment",
       sessionsPerWeek: 3,
-      penaltyPerMiss: 10,
+      penaltyPerMiss: TIERS.committed.penalty,
       graceSessionsRemaining: 0,
-      graceSessionsTotal: 0,
+      graceSessionsTotal: TIERS.committed.graceSessions,
     };
   }
   return {
@@ -101,9 +103,9 @@ export default async function DashboardPage() {
   let sessionsThisWeek = 0;
   let sessionsGoal = 3;
   let penaltiesCharged = 0;
-  let onusPoints = MOCK_DASHBOARD_STATS.onusPoints;
+  let onusPoints: number = MOCK_DASHBOARD_STATS.onusPoints;
   let pointsEarnedThisMonth = MOCK_DASHBOARD_STATS.onusPointsEarnedThisMonth;
-  let pointsCap = MOCK_DASHBOARD_STATS.onusPointsCap;
+  let pointsCap: number = MOCK_DASHBOARD_STATS.onusPointsCap;
   let streak = 0;
   let weekDays: { date: string; dayName: string; status: DayStatus }[] = [];
   let userName = user.email?.split("@")[0] ?? "there";
@@ -163,8 +165,11 @@ export default async function DashboardPage() {
     commitment = toUiCommitment(c);
     if (c) {
       sessionsGoal = c.goal_frequency;
-      onusPoints = Math.round(Number(c.reward_balance));
-      pointsCap = tierPointsConfig[c.tier]?.pointsCapPerMonth ?? MOCK_DASHBOARD_STATS.onusPointsCap;
+      onusPoints =
+        Math.round(Number((c as { onus_points?: number }).onus_points ?? c.reward_balance ?? 0)) ||
+        MOCK_DASHBOARD_STATS.onusPoints;
+      pointsCap =
+        tierPointsConfig[c.tier]?.pointsCapPerMonth ?? MOCK_DASHBOARD_STATS.onusPointsCap;
       pointsEarnedThisMonth = 0;
     }
 
@@ -222,6 +227,7 @@ export default async function DashboardPage() {
       weekDays={weekDays}
       commitment={commitment ?? toUiCommitment(null)}
       tiers={tiers}
+      tierPointsConfig={tierPointsConfig}
     />
   );
 }

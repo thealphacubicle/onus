@@ -55,16 +55,17 @@ export function ContractSummary({
         </div>
         <div>
           <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
-            OnusPoints rate
+            OnusPoints
           </p>
           <p className="mt-1 font-mono text-[#f0efe8]">
-            {pointsConfig?.pointsRate ?? 0}× (up to{" "}
-            {pointsConfig?.pointsCapPerMonth.toLocaleString() ?? "—"} pts/mo)
+            {pointsConfig?.pointsRate ?? 0}× earn rate (up to{" "}
+            {pointsConfig?.pointsCapPerMonth?.toLocaleString() ?? "—"} pts/mo = $
+            {pointsConfig?.pointsCapDollarValue?.toFixed(2) ?? "—"})
           </p>
         </div>
         <div>
           <p className="text-xs text-[rgba(240,239,232,0.45)]">
-            First redemption unlocks at 500 pts (~$5 value)
+            Minimum redemption: 500 pts ($5.00)
           </p>
         </div>
       </div>

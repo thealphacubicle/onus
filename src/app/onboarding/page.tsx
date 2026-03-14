@@ -1,13 +1,21 @@
-import { getSelectableTiers, getTierPointsConfig } from "@/lib/tiers";
+import { getTiers, getTierPointsConfig } from "@/lib/tiers";
 import { OnboardingClient } from "@/components/onboarding/OnboardingClient";
 
 export default async function OnboardingPage() {
-  const [tiers, tierPointsConfig] = await Promise.all([
-    getSelectableTiers(),
+  const [{ tiers, pricingDetails }, tierPointsConfig] = await Promise.all([
+    getTiers(),
     getTierPointsConfig(),
   ]);
 
+  const selectablePricingDetails = pricingDetails.filter((d) =>
+    ["starter", "committed", "dedicated"].includes(d.id)
+  );
+
   return (
-    <OnboardingClient tiers={tiers} tierPointsConfig={tierPointsConfig} />
+    <OnboardingClient
+      tiers={tiers}
+      pricingDetails={selectablePricingDetails}
+      tierPointsConfig={tierPointsConfig}
+    />
   );
 }

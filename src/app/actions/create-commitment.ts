@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { TIERS } from "@/lib/mock-data";
 import type { TierId } from "@/lib/types";
 
 const DAYS_BY_FREQUENCY: Record<number, number[]> = {
@@ -54,6 +55,7 @@ export async function createCommitment(formData: {
     return { error: "auth_required" };
   }
 
+  const tierConfig = TIERS[formData.tier as keyof typeof TIERS];
   const { data: commitment, error: commitError } = await supabase
     .from("commitments")
     .insert({
@@ -65,6 +67,11 @@ export async function createCommitment(formData: {
       grace_sessions_total: formData.grace_sessions_total,
       grace_sessions_remaining: formData.grace_sessions_total,
       why: formData.why || null,
+      ...(tierConfig && {
+        onus_points: 0,
+        onus_points_cap: tierConfig.pointsCapPerMonth,
+        points_rate: tierConfig.pointsRate,
+      }),
     })
     .select("id")
     .single();

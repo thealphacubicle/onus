@@ -27,10 +27,10 @@ export function StatsRow({
       </div>
       <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">
         <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
-          Penalties charged
+          Penalties this month
         </p>
         <p className="mt-1 font-mono text-2xl font-medium text-[#f07070]">
-          ${penaltiesCharged}
+          ${penaltiesCharged.toFixed(2)}
         </p>
       </div>
       <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">

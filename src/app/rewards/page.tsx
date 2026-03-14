@@ -20,8 +20,8 @@ export default async function RewardsPage() {
     return null;
   }
 
-  let onusPoints = MOCK_ONUS_POINTS;
-  let pointsToNextRedemption = MOCK_POINTS_TO_NEXT_REDEMPTION;
+  let onusPoints: number = MOCK_ONUS_POINTS;
+  let pointsToNextRedemption: number = MOCK_POINTS_TO_NEXT_REDEMPTION;
   let userName = user.email?.split("@")[0] ?? "there";
   let streak = 0;
 

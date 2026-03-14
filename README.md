@@ -33,7 +33,7 @@ No honor system. No excuses. Just proof.
 |---------|-------------|
 | **AI Goal Builder** | Smart goal creation based on your schedule, history, and motivation |
 | **Geolocation Check-in** | Verify you were actually at the gym — no manual logging |
-| **Tiered Penalties** | Starter ($5), Committed ($10), Dedicated ($20) per miss |
+| **Tiered Penalties** | Starter ($7), Committed ($15), Dedicated ($30) per miss |
 | **Grace Sessions** | Buffer for emergencies — resets monthly by tier |
 | **Rewards Program** | Earn credits toward gym memberships, supplements, gear, gift cards |
 | **Partner Ecosystem** | Planet Fitness, Equinox, MyProtein, Whoop, Garmin, Nike, and more |

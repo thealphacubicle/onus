@@ -110,15 +110,67 @@ export async function getTiers(): Promise<{
   }
 }
 
+const AI_COACHING_LABELS: Record<string, string> = {
+  goal_builder_only: "Goal builder only",
+  weekly: "Weekly coaching",
+  daily: "Daily coaching",
+  daily_plus_insights: "Daily + insights + habit stacking",
+};
+
 function getFallbackTiers(): {
   tiers: Tier[];
   pricingDetails: PricingTierDetail[];
 } {
-  const { TIERS, PRICING_TIER_DETAILS } = require("@/lib/mock-data");
-  return {
-    tiers: TIERS,
-    pricingDetails: PRICING_TIER_DETAILS,
+  const { TIERS } = require("@/lib/mock-data");
+  const tierOrder = ["starter", "committed", "dedicated"] as const;
+  const tierDescriptions: Record<string, string> = {
+    starter:
+      "For building the habit. Low stakes to start — but the commitment is still real.",
+    committed:
+      "For people ready to stop making excuses. Earn OnusPoints on every session you show up for.",
+    dedicated:
+      "For when you're done playing around. Earn OnusPoints at the highest standard rate.",
   };
+  const tiers: Tier[] = tierOrder.map((id) => {
+    const t = TIERS[id];
+    return {
+      id,
+      name: t.name,
+      priceMonthly: t.price,
+      penaltyPerMiss: t.penalty,
+      firstMonthFree: t.firstMonthFree,
+      graceSessions: t.graceSessions,
+      pointsRate: t.pointsRate,
+      pointsCapPerMonth: t.pointsCapPerMonth,
+      pointsCapDollarValue: t.pointsCapDollarValue,
+      aiCoaching: t.aiCoaching,
+      weeklyCheckin: t.weeklyCheckin,
+      monthlyReview: t.monthlyReview,
+      description: tierDescriptions[id],
+    };
+  });
+  const pricingDetails: PricingTierDetail[] = tierOrder.map((id) => {
+    const t = TIERS[id];
+    return {
+      id,
+      name: t.name,
+      priceMonthly: t.price,
+      penaltyPerMiss: t.penalty,
+      badge: id === "starter" ? "First month free" : id === "committed" ? "Most popular" : "Highest stakes",
+      badgeVariant: id === "starter" ? "green" : id === "committed" ? "blue" : "amber",
+      goalRange: id === "starter" ? "1–2 sessions/week" : id === "committed" ? "3–4 sessions/week" : "5–7 sessions/week",
+      graceSessions: `${t.graceSessions}/month`,
+      aiCoaching: AI_COACHING_LABELS[t.aiCoaching] ?? t.aiCoaching,
+      rewardRate: `${t.pointsRate}× OnusPoints`,
+      rewardCap: `${t.pointsCapPerMonth.toLocaleString()} pts ($${t.pointsCapDollarValue.toFixed(2)} value)`,
+      weeklyCheckIn: t.weeklyCheckin,
+      monthlyReview: t.monthlyReview,
+      onusOneEligible: "Yes — after 180 days",
+      ctaText: id === "starter" ? "Try free" : "Get started",
+      ctaVariant: "accent",
+    };
+  });
+  return { tiers, pricingDetails };
 }
 
 export async function getSelectableTiers(): Promise<Tier[]> {
@@ -154,11 +206,15 @@ export async function getTierPointsConfig(): Promise<Record<string, TierPointsCo
 }
 
 function getFallbackTierPointsConfig(): Record<string, TierPointsConfig> {
-  const { TIER_POINTS_CONFIG } = require("@/lib/mock-data");
+  const { TIERS } = require("@/lib/mock-data");
   const config: Record<string, TierPointsConfig> = {};
-  for (const [key, val] of Object.entries(TIER_POINTS_CONFIG)) {
-    const dbKey = key === "onusOne" ? "onus_one" : key;
-    config[dbKey] = val as TierPointsConfig;
+  for (const [key, t] of Object.entries(TIERS)) {
+    const tier = t as { pointsRate: number; pointsCapPerMonth: number; pointsCapDollarValue: number };
+    config[key] = {
+      pointsRate: tier.pointsRate,
+      pointsCapPerMonth: tier.pointsCapPerMonth,
+      pointsCapDollarValue: tier.pointsCapDollarValue,
+    };
   }
   return config;
 }

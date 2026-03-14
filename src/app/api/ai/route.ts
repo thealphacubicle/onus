@@ -61,7 +61,7 @@ const FALLBACK_MESSAGES: Record<FeatureType, string> = {
   coaching:
     "You're two sessions in this week with one to go. Friday's your chance. Don't let the streak slip.",
   reflection:
-    "You missed a session. That's $10. You've got time left this week — get two more in and you're back on track.",
+    "You missed a session. That's a penalty. You've got time left this week — get two more in and you're back on track.",
   summary:
     "Solid month. You hit most of your sessions. A few misses cost you, but the streak shows you can do this. Next month: lock in those high-risk days.",
   nudge:

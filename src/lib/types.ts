@@ -1,4 +1,4 @@
-export type TierId = "starter" | "committed" | "dedicated";
+export type TierId = "starter" | "committed" | "dedicated" | "onus_one";
 
 export interface Tier {
   id: TierId;
@@ -6,7 +6,14 @@ export interface Tier {
   priceMonthly: number;
   penaltyPerMiss: number;
   firstMonthFree?: boolean;
-  description: string;
+  graceSessions?: number;
+  pointsRate?: number;
+  pointsCapPerMonth?: number;
+  pointsCapDollarValue?: number;
+  aiCoaching?: string;
+  weeklyCheckin?: boolean;
+  monthlyReview?: boolean;
+  description?: string;
 }
 
 export interface User {

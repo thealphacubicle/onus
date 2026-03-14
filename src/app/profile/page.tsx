@@ -1,59 +1,121 @@
-"use client";
+import { createClient } from "@/lib/supabase/server";
+import { ProfileContent } from "@/components/profile/ProfileContent";
+import type { Commitment } from "@/lib/types";
 
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_USER, MOCK_COMMITMENT, MOCK_DASHBOARD_STATS } from "@/lib/mock-data";
-import { TIERS } from "@/lib/mock-data";
+function getMonday(date: Date): Date {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d;
+}
 
-export default function ProfilePage() {
-  const tier = TIERS.find((t) => t.id === MOCK_COMMITMENT.tierId);
+function toUiCommitment(
+  c: {
+    tier: string;
+    goal_description: string | null;
+    goal_frequency: number;
+    penalty_amount: number;
+    grace_sessions_remaining: number;
+    grace_sessions_total: number;
+  } | null
+): Commitment {
+  if (!c) {
+    return {
+      tierId: "committed",
+      goal: "No active commitment",
+      sessionsPerWeek: 3,
+      penaltyPerMiss: 10,
+      graceSessionsRemaining: 0,
+      graceSessionsTotal: 0,
+    };
+  }
+  return {
+    tierId: c.tier as Commitment["tierId"],
+    goal: c.goal_description ?? "No goal set",
+    sessionsPerWeek: c.goal_frequency,
+    penaltyPerMiss: c.penalty_amount,
+    graceSessionsRemaining: c.grace_sessions_remaining,
+    graceSessionsTotal: c.grace_sessions_total,
+  };
+}
+
+export default async function ProfilePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  let fullName = user.user_metadata?.full_name ?? "";
+  let email = user.email ?? "";
+  let commitment: Commitment = toUiCommitment(null);
+  let streak = 0;
+
+  try {
+    const [profileRes, commitRes, sessionsRes] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("full_name, email")
+        .eq("id", user.id)
+        .maybeSingle(),
+      supabase
+        .from("commitments")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("active", true)
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from("sessions")
+        .select("scheduled_date, checked_in, missed")
+        .eq("user_id", user.id)
+        .order("scheduled_date", { ascending: false })
+        .limit(200),
+    ]);
+
+    if (profileRes.data) {
+      fullName = profileRes.data.full_name ?? fullName;
+      email = profileRes.data.email ?? email;
+    }
+
+    if (commitRes.data) {
+      commitment = toUiCommitment(commitRes.data);
+    }
+
+    const sessions = sessionsRes.data ?? [];
+    const byWeek = new Map<string, typeof sessions>();
+    for (const s of sessions) {
+      const monday = getMonday(new Date(s.scheduled_date));
+      const key = monday.toISOString().split("T")[0];
+      if (!byWeek.has(key)) byWeek.set(key, []);
+      byWeek.get(key)!.push(s);
+    }
+    const sortedWeeks = Array.from(byWeek.entries()).sort((a, b) =>
+      b[0].localeCompare(a[0])
+    );
+    for (const [, weekSessions] of sortedWeeks) {
+      const allDone = weekSessions.every((s) => s.checked_in);
+      const anyMissed = weekSessions.some((s) => s.missed);
+      if (allDone && !anyMissed) streak++;
+      else break;
+    }
+  } catch {
+    // Fallback to auth user data
+    if (!fullName && user.email) {
+      fullName = user.email.split("@")[0] ?? "";
+    }
+  }
 
   return (
-    <div className="flex min-h-screen bg-[#0e0e10]">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Navbar
-          variant="dashboard"
-          userName={MOCK_USER.name.split(" ")[0]}
-          streak={MOCK_DASHBOARD_STATS.streak}
-        />
-        <main className="flex-1 p-6">
-          <h1 className="text-2xl font-semibold text-[#f0efe8]">Profile</h1>
-          <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
-            Your account details
-          </p>
-
-          <div className="mt-8 space-y-6">
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">
-              <h2 className="font-medium text-[#f0efe8]">Account</h2>
-              <div className="mt-4 space-y-2">
-                <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                  <span className="text-[rgba(240,239,232,0.45)]">Name:</span>{" "}
-                  {MOCK_USER.name}
-                </p>
-                <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                  <span className="text-[rgba(240,239,232,0.45)]">Email:</span>{" "}
-                  {MOCK_USER.email}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">
-              <h2 className="font-medium text-[#f0efe8]">Current plan</h2>
-              <div className="mt-4 space-y-2">
-                <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                  <span className="text-[rgba(240,239,232,0.45)]">Tier:</span>{" "}
-                  {tier?.name}
-                </p>
-                <p className="font-mono text-sm text-[#f0efe8]">
-                  <span className="text-[rgba(240,239,232,0.45)]">Price:</span>{" "}
-                  ${tier?.priceMonthly.toFixed(2)}/mo
-                </p>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
+    <ProfileContent
+      fullName={fullName}
+      email={email}
+      commitment={commitment}
+      streak={streak}
+    />
   );
 }

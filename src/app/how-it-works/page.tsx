@@ -37,8 +37,8 @@ export default function HowItWorksPage() {
                 2. Verify
               </h2>
               <p className="mt-3 text-[rgba(240,239,232,0.7)]">
-                Check in after each session. Simple, fast, no gym selfies
-                required. We trust you — but the penalty keeps you honest.
+                Use the app to check-in after each session. Fool-proof. Uses
+                geolocation technology to make you accountable.
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
@@ -57,7 +57,7 @@ export default function HowItWorksPage() {
 
           <div className="mt-16 text-center">
             <Link
-              href="/onboarding"
+              href="/login"
               className="inline-block rounded-lg bg-[#c8f060] px-8 py-3.5 text-base font-medium text-[#0e0e10] transition-opacity hover:opacity-90"
             >
               Get started

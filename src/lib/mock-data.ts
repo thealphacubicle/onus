@@ -276,7 +276,7 @@ export const PRICING_FAQ = [
     id: "faq-3",
     question: "How do I check in?",
     answer:
-      "Check in through the Onus app after each gym session. It's quick — no photos or proof required. We operate on trust, but the financial stakes keep you accountable.",
+      "Use the Onus app to check-in after each gym session. Fool-proof. Uses geolocation technology to make you accountable.",
   },
   {
     id: "faq-4",

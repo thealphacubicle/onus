@@ -3,19 +3,27 @@ import { Navbar } from "@/components/layout/Navbar";
 import { PRICING_PAGE_FAQ } from "@/lib/mock-data";
 import { getTiers } from "@/lib/tiers";
 import { PricingFAQ } from "@/components/pricing/PricingFAQ";
+import { PricingHighlight } from "@/components/pricing/PricingHighlight";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default async function PricingPage() {
+export default async function PricingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ highlight?: string }>;
+}) {
+  const params = await searchParams;
+  const highlight = params.highlight ?? null;
   const { tiers, pricingDetails } = await getTiers();
   const getDetail = (id: string) =>
     pricingDetails.find((t) => t.id === id)!;
 
   return (
     <div className="min-h-screen bg-[#0e0e10]">
+      <PricingHighlight highlight={highlight} />
       <Navbar variant="landing" />
 
       <main className="pt-16">
@@ -45,7 +53,8 @@ export default async function PricingPage() {
                 return (
                   <div
                     key={tier.id}
-                    className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6"
+                    id={`tier-${tier.id}`}
+                    className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6 transition-shadow duration-300"
                   >
                     <div className="flex items-start justify-between">
                       <h2 className="text-lg font-medium text-[#f0efe8]">

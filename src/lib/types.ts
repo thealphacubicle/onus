@@ -46,6 +46,7 @@ export interface WeekSummary {
   sessionsCompleted: number;
   sessionsMissed: number;
   penaltiesCharged: number;
+  missedDays?: string[];
 }
 
 export interface RedemptionOption {

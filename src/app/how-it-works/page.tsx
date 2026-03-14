@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
+import { BehavioralScienceViz } from "@/components/science/BehavioralScienceViz";
 
 export default function HowItWorksPage() {
   return (
@@ -85,6 +86,20 @@ export default function HowItWorksPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* The science behind it */}
+        <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#0e0e10] py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <h2 className="text-center text-2xl font-semibold text-[#f0efe8]">
+              The science behind it
+            </h2>
+            <p className="mx-auto mt-2 max-w-2xl text-center text-[rgba(240,239,232,0.7)]">
+              Onus is built on two of the most validated principles in behavioral
+              economics.
+            </p>
+            <BehavioralScienceViz />
           </div>
         </section>
 

@@ -21,7 +21,7 @@ export function PaktCard({
       <div className="mt-4 space-y-2">
         <p className="text-sm text-[rgba(240,239,232,0.8)]">
           <span className="text-[rgba(240,239,232,0.45)]">Tier:</span>{" "}
-          {tier?.name}
+          {tier?.name ?? commitment.tierId}
         </p>
         <p className="text-sm text-[rgba(240,239,232,0.8)]">
           <span className="text-[rgba(240,239,232,0.45)]">Goal:</span>{" "}

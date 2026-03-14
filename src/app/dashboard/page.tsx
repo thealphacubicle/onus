@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
-import { MOCK_COACHING_MESSAGE } from "@/lib/mock-data";
 import { getSelectableTiers } from "@/lib/tiers";
 import type { Commitment } from "@/lib/types";
 import type { DayStatus } from "@/components/dashboard/WeekView";
@@ -104,8 +103,13 @@ export default async function DashboardPage() {
   let userName = user.email?.split("@")[0] ?? "there";
 
   try {
-    const [commitRes, profileRes, sessionsRes, penaltiesRes, allSessionsRes] =
-      await Promise.all([
+    const [
+      commitRes,
+      profileRes,
+      sessionsRes,
+      penaltiesRes,
+      allSessionsRes,
+    ] = await Promise.all([
         supabase
           .from("commitments")
           .select("*")
@@ -208,7 +212,6 @@ export default async function DashboardPage() {
       weekDays={weekDays}
       commitment={commitment ?? toUiCommitment(null)}
       tiers={tiers}
-      coachingMessage={MOCK_COACHING_MESSAGE}
     />
   );
 }

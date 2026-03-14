@@ -35,7 +35,12 @@ export default async function AddPaymentPage({
     .limit(1)
     .maybeSingle();
 
-  const defaultRedirect = commitment ? "/dashboard" : "/onboarding";
+  // No commitment yet — send to onboarding to select plan first
+  if (!commitment) {
+    redirect("/onboarding");
+  }
+
+  const defaultRedirect = "/dashboard";
   const safeRedirect =
     redirectTo && ALLOWED_REDIRECTS.includes(redirectTo) ? redirectTo : defaultRedirect;
 

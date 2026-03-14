@@ -5,7 +5,6 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
 import { StatsRow } from "@/components/dashboard/StatsRow";
 import { WeekView } from "@/components/dashboard/WeekView";
-import { CoachingCard } from "@/components/dashboard/CoachingCard";
 import { PaktCard } from "@/components/dashboard/PaktCard";
 import {
   Dialog,
@@ -33,7 +32,6 @@ interface DashboardContentProps {
   weekDays: DayData[];
   commitment: Commitment;
   tiers: Tier[];
-  coachingMessage: string;
 }
 
 export function DashboardContent({
@@ -46,7 +44,6 @@ export function DashboardContent({
   weekDays,
   commitment,
   tiers,
-  coachingMessage,
 }: DashboardContentProps) {
   const [checkInOpen, setCheckInOpen] = useState(false);
   const hasToday = weekDays.some((d) => d.status === "today");
@@ -69,9 +66,6 @@ export function DashboardContent({
               canCheckIn={hasToday}
               onCheckIn={() => setCheckInOpen(true)}
             />
-            <CoachingCard message={coachingMessage} />
-          </div>
-          <div className="mt-6">
             <PaktCard
               commitment={commitment}
               tiers={tiers}

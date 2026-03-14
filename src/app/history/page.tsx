@@ -1,15 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { HistoryTableClient } from "@/components/history/HistoryTableClient";
 import type { WeekSummary } from "@/lib/types";
+
+const DAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 function getMonday(date: Date): Date {
   const d = new Date(date);
@@ -27,11 +30,23 @@ function formatDateRange(start: Date, end: Date): string {
 
 async function getHistoryData(
   userId: string
-): Promise<{ history: WeekSummary[]; userName: string; streak: number }> {
+): Promise<{
+  history: WeekSummary[];
+  userName: string;
+  streak: number;
+  goalFrequency: number;
+  missesThisMonth: number;
+}> {
   const supabase = await createClient();
 
   try {
-    const [sessionsRes, penaltiesRes, profileRes] = await Promise.all([
+    const [
+      sessionsRes,
+      penaltiesRes,
+      profileRes,
+      commitRes,
+      monthPenaltiesRes,
+    ] = await Promise.all([
         supabase
           .from("sessions")
           .select("id, scheduled_date, checked_in, missed")
@@ -47,6 +62,24 @@ async function getHistoryData(
           .select("full_name")
           .eq("id", userId)
           .maybeSingle(),
+        supabase
+          .from("commitments")
+          .select("goal_frequency")
+          .eq("user_id", userId)
+          .eq("active", true)
+          .limit(1)
+          .maybeSingle(),
+        (() => {
+          const now = new Date();
+          const start = new Date(now.getFullYear(), now.getMonth(), 1);
+          const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+          return supabase
+            .from("penalties")
+            .select("id")
+            .eq("user_id", userId)
+            .gte("charged_at", start.toISOString())
+            .lte("charged_at", end.toISOString());
+        })(),
       ]);
 
     const sessions = sessionsRes.data ?? [];
@@ -64,6 +97,7 @@ async function getHistoryData(
         completed: number;
         missed: number;
         penaltyTotal: number;
+        missedDays: string[];
       }
     >();
 
@@ -81,6 +115,7 @@ async function getHistoryData(
           completed: 0,
           missed: 0,
           penaltyTotal: 0,
+          missedDays: [],
         });
       }
 
@@ -89,6 +124,10 @@ async function getHistoryData(
       else if (s.missed) {
         week.missed++;
         week.penaltyTotal += penaltyBySession.get(s.id) ?? 0;
+        const dayName = DAY_NAMES[new Date(s.scheduled_date).getDay()];
+        if (!week.missedDays.includes(dayName)) {
+          week.missedDays.push(dayName);
+        }
       }
     }
 
@@ -102,7 +141,11 @@ async function getHistoryData(
         sessionsCompleted: w.completed,
         sessionsMissed: w.missed,
         penaltiesCharged: w.penaltyTotal,
+        missedDays: w.missedDays,
       }));
+
+    const goalFrequency = commitRes.data?.goal_frequency ?? 3;
+    const missesThisMonth = monthPenaltiesRes.data?.length ?? 0;
 
     let userName = "there";
     if (profileRes.data?.full_name) {
@@ -124,9 +167,15 @@ async function getHistoryData(
       else break;
     }
 
-    return { history, userName, streak };
+    return { history, userName, streak, goalFrequency, missesThisMonth };
   } catch {
-    return { history: [], userName: "there", streak: 0 };
+    return {
+      history: [],
+      userName: "there",
+      streak: 0,
+      goalFrequency: 3,
+      missesThisMonth: 0,
+    };
   }
 }
 
@@ -140,7 +189,13 @@ export default async function HistoryPage() {
     return null;
   }
 
-  const { history, userName, streak } = await getHistoryData(user.id);
+  const {
+    history,
+    userName,
+    streak,
+    goalFrequency,
+    missesThisMonth,
+  } = await getHistoryData(user.id);
 
   return (
     <div className="flex min-h-screen bg-[#0e0e10]">
@@ -152,46 +207,13 @@ export default async function HistoryPage() {
           <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
             Your past weeks and penalties
           </p>
-          <div className="mt-6 overflow-hidden rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d]">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-[rgba(255,255,255,0.07)] hover:bg-transparent">
-                  <TableHead className="text-[rgba(240,239,232,0.6)]">
-                    Date range
-                  </TableHead>
-                  <TableHead className="text-[rgba(240,239,232,0.6)]">
-                    Sessions completed
-                  </TableHead>
-                  <TableHead className="text-[rgba(240,239,232,0.6)]">
-                    Sessions missed
-                  </TableHead>
-                  <TableHead className="text-[rgba(240,239,232,0.6)]">
-                    Penalties charged
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {history.map((week) => (
-                  <TableRow
-                    key={week.id}
-                    className="border-[rgba(255,255,255,0.07)] hover:bg-[#131315]"
-                  >
-                    <TableCell className="font-medium text-[#f0efe8]">
-                      {week.dateRange}
-                    </TableCell>
-                    <TableCell className="font-mono text-[#f0efe8]">
-                      {week.sessionsCompleted}
-                    </TableCell>
-                    <TableCell className="font-mono text-[#f07070]">
-                      {week.sessionsMissed}
-                    </TableCell>
-                    <TableCell className="font-mono text-[#f07070]">
-                      ${week.penaltiesCharged}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <div className="mt-6 min-w-0">
+            <HistoryTableClient
+              history={history}
+              userName={userName}
+              goalFrequency={goalFrequency}
+              missesThisMonth={missesThisMonth}
+            />
           </div>
         </main>
       </div>

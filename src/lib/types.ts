@@ -54,7 +54,14 @@ export interface RedemptionOption {
   name: string;
   description: string;
   cost: number;
+  costInPoints?: number;
   type: "discount" | "credit" | "partner";
+}
+
+export interface TierPointsConfig {
+  pointsRate: number;
+  pointsCapPerMonth: number;
+  pointsCapDollarValue: number;
 }
 
 export type RewardCategoryIcon = "gym" | "penalty" | "supplements" | "devices" | "gift";
@@ -66,4 +73,6 @@ export interface RewardCategory {
   icon: RewardCategoryIcon;
   partners: string[] | null;
   ctaText?: string;
+  minPts?: number;
+  minPtsDollarValue?: number;
 }

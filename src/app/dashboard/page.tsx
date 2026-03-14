@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
-import { getSelectableTiers } from "@/lib/tiers";
+import { getSelectableTiers, getTierPointsConfig } from "@/lib/tiers";
+import { MOCK_DASHBOARD_STATS } from "@/lib/mock-data";
 import type { Commitment } from "@/lib/types";
 import type { DayStatus } from "@/components/dashboard/WeekView";
 
@@ -84,7 +85,10 @@ function toUiCommitment(
 
 export default async function DashboardPage() {
   const supabase = await createClient();
-  const tiers = await getSelectableTiers();
+  const [tiers, tierPointsConfig] = await Promise.all([
+    getSelectableTiers(),
+    getTierPointsConfig(),
+  ]);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -97,7 +101,9 @@ export default async function DashboardPage() {
   let sessionsThisWeek = 0;
   let sessionsGoal = 3;
   let penaltiesCharged = 0;
-  let rewardsEarned = 0;
+  let onusPoints = MOCK_DASHBOARD_STATS.onusPoints;
+  let pointsEarnedThisMonth = MOCK_DASHBOARD_STATS.onusPointsEarnedThisMonth;
+  let pointsCap = MOCK_DASHBOARD_STATS.onusPointsCap;
   let streak = 0;
   let weekDays: { date: string; dayName: string; status: DayStatus }[] = [];
   let userName = user.email?.split("@")[0] ?? "there";
@@ -157,7 +163,9 @@ export default async function DashboardPage() {
     commitment = toUiCommitment(c);
     if (c) {
       sessionsGoal = c.goal_frequency;
-      rewardsEarned = Number(c.reward_balance);
+      onusPoints = Math.round(Number(c.reward_balance));
+      pointsCap = tierPointsConfig[c.tier]?.pointsCapPerMonth ?? MOCK_DASHBOARD_STATS.onusPointsCap;
+      pointsEarnedThisMonth = 0;
     }
 
     if (profileRes.data?.full_name) {
@@ -208,7 +216,9 @@ export default async function DashboardPage() {
       sessionsThisWeek={sessionsThisWeek}
       sessionsGoal={sessionsGoal}
       penaltiesCharged={penaltiesCharged}
-      rewardsEarned={rewardsEarned}
+      onusPoints={onusPoints}
+      pointsEarnedThisMonth={pointsEarnedThisMonth}
+      pointsCap={pointsCap}
       weekDays={weekDays}
       commitment={commitment ?? toUiCommitment(null)}
       tiers={tiers}

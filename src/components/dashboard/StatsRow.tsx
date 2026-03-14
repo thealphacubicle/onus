@@ -4,15 +4,17 @@ interface StatsRowProps {
   sessionsThisWeek: number;
   sessionsGoal: number;
   penaltiesCharged: number;
-  rewardsEarned: number;
+  onusPoints: number;
 }
 
 export function StatsRow({
   sessionsThisWeek,
   sessionsGoal,
   penaltiesCharged,
-  rewardsEarned,
+  onusPoints,
 }: StatsRowProps) {
+  const redemptionValue = (onusPoints / 100).toFixed(2);
+
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">
@@ -33,10 +35,13 @@ export function StatsRow({
       </div>
       <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">
         <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
-          Rewards earned
+          OnusPoints
         </p>
         <p className="mt-1 font-mono text-2xl font-medium text-[#c8f060]">
-          ${rewardsEarned.toFixed(2)}
+          {onusPoints.toLocaleString()} pts
+        </p>
+        <p className="mt-0.5 text-[11px] text-[rgba(240,239,232,0.45)]">
+          ${redemptionValue} redemption value
         </p>
       </div>
     </div>

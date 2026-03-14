@@ -34,7 +34,8 @@ interface SummaryContext {
   sessionsTotal: number;
   missesCount: number;
   penaltiesCharged: number;
-  rewardsEarned: number;
+  onusPoints: number;
+  onusPointsRedemptionValue: string;
   streakAtMonthEnd: number;
   bestWeek: string;
   comparedToPriorMonth: string;
@@ -96,7 +97,7 @@ function buildSummaryPrompt(ctx: SummaryContext): string {
   return `Write a monthly summary for ${ctx.userName} for ${ctx.month}.
 Sessions: ${ctx.sessionsCompleted}/${ctx.sessionsTotal}.
 Misses: ${ctx.missesCount}. Penalties: $${ctx.penaltiesCharged}.
-Rewards earned: $${ctx.rewardsEarned}.
+OnusPoints: ${ctx.onusPoints.toLocaleString()} pts ($${ctx.onusPointsRedemptionValue} redemption value).
 Streak at month end: ${ctx.streakAtMonthEnd} days.
 Best week: ${ctx.bestWeek}.
 vs prior month: ${ctx.comparedToPriorMonth}.
@@ -112,7 +113,7 @@ Current tier: ${ctx.currentTier}.
 They've been consistent for ${ctx.weeksConsistent} weeks.
 Grace sessions used this month: ${ctx.graceSessionsUsed}.
 Next tier: ${ctx.nextTier} ($${ctx.nextTierPenalty} penalty,
-${ctx.nextTierRewardRate}x rewards).
+OnusPoints earn rate ${ctx.nextTierRewardRate}×).
 Make them feel the gap between where they are
 and what they're capable of.
 One observation, one challenge, one invitation.

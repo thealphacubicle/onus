@@ -95,13 +95,13 @@ export default async function PricingPage({
                       </p>
                       <p>
                         <span className="text-[rgba(240,239,232,0.45)]">
-                          Reward rate:
+                          Earn rate:
                         </span>{" "}
                         {detail.rewardRate}
                       </p>
                       <p>
                         <span className="text-[rgba(240,239,232,0.45)]">
-                          Monthly reward cap:
+                          Monthly cap:
                         </span>{" "}
                         {detail.rewardCap}
                       </p>
@@ -167,7 +167,7 @@ export default async function PricingPage({
                 </div>
                 <p className="mt-1 text-xs text-[rgba(240,239,232,0.45)]">
                   Earned after 180 days. $4.50/mo — the lowest you&apos;ll ever
-                  pay, with the highest reward rate.
+                  pay, with the highest OnusPoints earn rate.
                 </p>
                 <div className="mt-4 rounded-md bg-[#fef3c7] p-3">
                   <p className="text-xs font-medium text-[#92400e]">
@@ -191,17 +191,20 @@ export default async function PricingPage({
                   </p>
                   <p>
                     <span className="text-[rgba(240,239,232,0.45)]">
-                      Reward rate:
+                      Earn rate:
                     </span>{" "}
                     <span className="text-[#b45309] font-medium">
-                      2× permanent
+                      2× OnusPoints
                     </span>
+                  </p>
+                  <p className="text-[11px] italic text-[rgba(240,239,232,0.45)]">
+                    Funded by the community penalty pool
                   </p>
                   <p>
                     <span className="text-[rgba(240,239,232,0.45)]">
-                      Monthly reward cap:
+                      Monthly cap:
                     </span>{" "}
-                    $4.50
+                    1,798 pts ($17.98 value)
                   </p>
                   <p>
                     <span className="text-[rgba(240,239,232,0.45)]">
@@ -331,7 +334,7 @@ export default async function PricingPage({
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
-                    Reward rate
+                    OnusPoints earn rate
                   </td>
                   <td className="py-4 px-6 font-mono">0.5×</td>
                   <td className="py-4 px-6 font-mono">0.75×</td>
@@ -340,12 +343,12 @@ export default async function PricingPage({
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">
-                    Monthly reward cap
+                    Monthly pts cap
                   </td>
-                  <td className="py-4 px-6">$1.50</td>
-                  <td className="py-4 px-6">$3.00</td>
-                  <td className="py-4 px-6">$6.00</td>
-                  <td className="py-4 px-6">$4.50</td>
+                  <td className="py-4 px-6">350</td>
+                  <td className="py-4 px-6">749</td>
+                  <td className="py-4 px-6">1,799</td>
+                  <td className="py-4 px-6">1,798</td>
                 </tr>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">
                   <td className="py-4 pr-6 text-[rgba(240,239,232,0.45)]">

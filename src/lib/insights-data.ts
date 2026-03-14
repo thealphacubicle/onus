@@ -248,7 +248,8 @@ export async function getInsightsData(userId: string) {
     ? normalizeTierId(process.env.INSIGHTS_TIER_OVERRIDE)
     : normalizeTierId(rawTier);
   const sessionsGoal = c?.goal_frequency ?? 3;
-  const rewardsEarned = Number(c?.reward_balance ?? 0);
+  const onusPoints = Math.round(Number(c?.reward_balance ?? 0));
+  const onusPointsRedemptionValue = (onusPoints / 100).toFixed(2);
   const why = c?.why ?? "";
   const graceSessionsUsed =
     (c?.grace_sessions_total ?? 0) - (c?.grace_sessions_remaining ?? 0);
@@ -352,7 +353,8 @@ export async function getInsightsData(userId: string) {
     sessionsTotal: monthTotal,
     missesCount: missesThisMonth,
     penaltiesCharged,
-    rewardsEarned,
+    onusPoints,
+    onusPointsRedemptionValue,
     streakAtMonthEnd: streak,
     bestWeek,
     comparedToPriorMonth,

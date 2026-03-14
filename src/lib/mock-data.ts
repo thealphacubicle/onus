@@ -1,4 +1,27 @@
-import type { Tier, User, Commitment, Session, WeekSummary, RedemptionOption, RewardCategory } from "./types";
+import type { Tier, User, Commitment, Session, WeekSummary, RedemptionOption, RewardCategory, TierPointsConfig } from "./types";
+
+export const TIER_POINTS_CONFIG: Record<string, TierPointsConfig> = {
+  starter: {
+    pointsRate: 0.5,
+    pointsCapPerMonth: 350,
+    pointsCapDollarValue: 3.5,
+  },
+  committed: {
+    pointsRate: 0.75,
+    pointsCapPerMonth: 749,
+    pointsCapDollarValue: 7.49,
+  },
+  dedicated: {
+    pointsRate: 1,
+    pointsCapPerMonth: 1799,
+    pointsCapDollarValue: 17.99,
+  },
+  onusOne: {
+    pointsRate: 2,
+    pointsCapPerMonth: 1798,
+    pointsCapDollarValue: 17.98,
+  },
+};
 
 export const TIERS: Tier[] = [
   {
@@ -14,14 +37,14 @@ export const TIERS: Tier[] = [
     name: "Committed",
     priceMonthly: 5.5,
     penaltyPerMiss: 10,
-    description: "For people ready to stop making excuses. Earn 0.75× rewards on every session you show up for.",
+    description: "For people ready to stop making excuses. Earn OnusPoints on every session you show up for.",
   },
   {
     id: "dedicated",
     name: "Dedicated",
     priceMonthly: 10.5,
     penaltyPerMiss: 20,
-    description: "For when you're done playing around. Earn 1× rewards — one dollar back for every dollar your subscription costs.",
+    description: "For when you're done playing around. Earn OnusPoints at the highest standard rate.",
   },
 ];
 
@@ -49,8 +72,8 @@ export const PRICING_TIER_DETAILS: PricingTierDetail[] = [
     goalRange: "1–2 sessions/week",
     graceSessions: "4/month",
     aiCoaching: "Goal builder only",
-    rewardRate: "0.5×",
-    rewardCap: "$1.50",
+    rewardRate: "0.5× OnusPoints",
+    rewardCap: "350 pts ($3.50 value)",
     weeklyCheckIn: false,
     monthlyReview: false,
     onusOneEligible: "Yes — after 180 days",
@@ -64,8 +87,8 @@ export const PRICING_TIER_DETAILS: PricingTierDetail[] = [
     goalRange: "3–4 sessions/week",
     graceSessions: "3/month",
     aiCoaching: "Weekly check-in",
-    rewardRate: "0.75×",
-    rewardCap: "$3.00",
+    rewardRate: "0.75× OnusPoints",
+    rewardCap: "749 pts ($7.49 value)",
     weeklyCheckIn: true,
     monthlyReview: false,
     onusOneEligible: "Yes — after 180 days",
@@ -79,8 +102,8 @@ export const PRICING_TIER_DETAILS: PricingTierDetail[] = [
     goalRange: "5–7 sessions/week",
     graceSessions: "2/month",
     aiCoaching: "Daily coaching + pushback",
-    rewardRate: "1×",
-    rewardCap: "$6.00",
+    rewardRate: "1× OnusPoints",
+    rewardCap: "1,799 pts ($17.99 value)",
     weeklyCheckIn: "n/a",
     monthlyReview: true,
     onusOneEligible: "Yes — after 180 days",
@@ -163,11 +186,18 @@ function getWeekDates(): { date: string; dayName: string; status: Session["statu
 
 export const MOCK_WEEK_DAYS = getWeekDates();
 
+export const MOCK_ONUS_POINTS = 1240;
+export const MOCK_ONUS_POINTS_CAP = 749;
+export const MOCK_ONUS_POINTS_REDEMPTION_VALUE = 12.4;
+export const MOCK_POINTS_TO_NEXT_REDEMPTION = Math.max(0, 500 - (MOCK_ONUS_POINTS % 500));
+
 export const MOCK_DASHBOARD_STATS = {
   sessionsThisWeek: 2,
   sessionsGoal: 3,
   penaltiesCharged: 10,
-  rewardsEarned: 4.2,
+  onusPoints: MOCK_ONUS_POINTS,
+  onusPointsCap: MOCK_ONUS_POINTS_CAP,
+  onusPointsEarnedThisMonth: 420,
   streak: 3,
 };
 
@@ -231,12 +261,10 @@ export const MOCK_HISTORY: WeekSummary[] = [
   },
 ];
 
-export const MOCK_REWARDS_BALANCE = 4.2;
-
 export const MOCK_PENALTY_BALANCE = 20;
 
 export const MOCK_PENALTY_RECOVERABLE = Math.min(
-  MOCK_REWARDS_BALANCE,
+  MOCK_ONUS_POINTS_REDEMPTION_VALUE,
   MOCK_PENALTY_BALANCE
 );
 
@@ -244,17 +272,21 @@ export const REWARD_CATEGORIES: RewardCategory[] = [
   {
     id: "gym",
     label: "Gym membership",
-    subtext: "Apply rewards directly to your monthly dues",
+    subtext: "Apply OnusPoints directly to your monthly dues",
     icon: "gym",
     partners: ["Planet Fitness", "Equinox", "Anytime Fitness", "LA Fitness"],
     ctaText: "Check if your gym is supported",
+    minPts: 500,
+    minPtsDollarValue: 5,
   },
   {
     id: "penalty",
     label: "Penalty refunds",
-    subtext: "Recover past penalties with your earned rewards",
+    subtext: "Recover past penalties with your earned OnusPoints",
     icon: "penalty",
     partners: null,
+    minPts: 500,
+    minPtsDollarValue: 5,
   },
   {
     id: "supplements",
@@ -262,13 +294,17 @@ export const REWARD_CATEGORIES: RewardCategory[] = [
     subtext: "Shop with our nutrition partners",
     icon: "supplements",
     partners: ["MyProtein", "Thorne", "Athletic Greens (AG1)", "GNC"],
+    minPts: 500,
+    minPtsDollarValue: 5,
   },
   {
     id: "devices",
     label: "Smart devices",
-    subtext: "Put rewards toward wearables and trackers",
+    subtext: "Put OnusPoints toward wearables and trackers",
     icon: "devices",
     partners: ["Whoop", "Fitbit", "Garmin", "Apple Health partners"],
+    minPts: 500,
+    minPtsDollarValue: 5,
   },
   {
     id: "gift",
@@ -276,6 +312,8 @@ export const REWARD_CATEGORIES: RewardCategory[] = [
     subtext: "Redeem for major retailer gift cards",
     icon: "gift",
     partners: ["Amazon", "Target", "Walmart", "Nike"],
+    minPts: 500,
+    minPtsDollarValue: 5,
   },
 ];
 
@@ -422,21 +460,33 @@ export const PRICING_PAGE_FAQ = [
   },
   {
     id: "faq-5",
-    question: "What if my gym isn't supported for rewards?",
+    question: "What if my gym isn't supported for OnusPoints?",
     answer:
-      "You can still redeem rewards for supplements, smart devices, and gift cards regardless of which gym you attend.",
+      "You can still redeem OnusPoints for supplements, smart devices, and gift cards regardless of which gym you attend.",
   },
   {
     id: "faq-6",
     question: "What is Onus One?",
     answer:
-      "Onus One is an invitation-only membership for users who have maintained consistent attendance for 180 days. It comes with a reduced subscription, elevated rewards, and access to a community of members who've built the same habit. You can't buy it — you earn it.",
+      "Onus One is an invitation-only membership for users who have maintained consistent attendance for 180 days. It comes with a reduced subscription, elevated OnusPoints, and access to a community of members who've built the same habit. You can't buy it — you earn it.",
   },
   {
     id: "faq-7",
     question: "What happens if I fall off as an Onus One member?",
     answer:
       "Your habit tracking continues as an Onus One member. If you miss 5 goals, your status is paused and you'll be asked to choose a standard tier again. Once you've rebuilt 60 days of consistent attendance, you can apply to reinstate your Onus One status.",
+  },
+  {
+    id: "faq-8",
+    question: "How do OnusPoints work?",
+    answer:
+      "Every session you complete earns OnusPoints based on your tier. 100 points = $1 in redemption value. You need at least 500 points to make your first redemption. Points are capped each month at your subscription value so the system stays fair. Unused points expire after 12 months of inactivity.",
+  },
+  {
+    id: "faq-9",
+    question: "What can I redeem OnusPoints for?",
+    answer:
+      "OnusPoints can be redeemed with our partner network — gym membership credits, supplements (MyProtein, Thorne, AG1), smart devices (Whoop, Fitbit, Garmin), and gift cards (Amazon, Target, Nike, Walmart). Minimum redemption is 500 points ($5 value).",
   },
 ];
 
@@ -461,9 +511,9 @@ export const PRICING_FAQ = [
   },
   {
     id: "faq-4",
-    question: "What can I redeem rewards for?",
+    question: "What can I redeem OnusPoints for?",
     answer:
-      "Earned rewards can be redeemed for gym membership discounts, gear credits at partner stores, supplement credits, and recovery sessions like massage or physio.",
+      "OnusPoints can be redeemed with our partner network — gym membership credits, supplements (MyProtein, Thorne, AG1), smart devices (Whoop, Fitbit, Garmin), and gift cards (Amazon, Target, Nike, Walmart). Minimum redemption is 500 points ($5 value).",
   },
   {
     id: "faq-5",
@@ -479,6 +529,7 @@ export const MOCK_REDEMPTIONS: RedemptionOption[] = [
     name: "Gym Membership Discount",
     description: "$10 off your next month at participating gyms",
     cost: 10,
+    costInPoints: 1000,
     type: "discount",
   },
   {
@@ -486,6 +537,7 @@ export const MOCK_REDEMPTIONS: RedemptionOption[] = [
     name: "Gear Credits",
     description: "Redeem for workout gear at partner stores",
     cost: 15,
+    costInPoints: 1500,
     type: "credit",
   },
   {
@@ -493,6 +545,7 @@ export const MOCK_REDEMPTIONS: RedemptionOption[] = [
     name: "Protein Supplement Credit",
     description: "$5 credit at supplement partners",
     cost: 5,
+    costInPoints: 500,
     type: "partner",
   },
   {
@@ -500,6 +553,7 @@ export const MOCK_REDEMPTIONS: RedemptionOption[] = [
     name: "Recovery Session",
     description: "One free massage or physio session",
     cost: 25,
+    costInPoints: 2500,
     type: "partner",
   },
 ];

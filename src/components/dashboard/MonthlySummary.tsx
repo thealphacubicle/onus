@@ -13,7 +13,8 @@ interface MonthlySummaryProps {
   userName: string;
   missesCount: number;
   penaltiesCharged: number;
-  rewardsEarned: number;
+  onusPoints: number;
+  onusPointsRedemptionValue: string;
   streakAtMonthEnd: number;
   bestWeek: string;
   comparedToPriorMonth: string;
@@ -27,7 +28,8 @@ async function fetchSummary(context: {
   sessionsTotal: number;
   missesCount: number;
   penaltiesCharged: number;
-  rewardsEarned: number;
+  onusPoints: number;
+  onusPointsRedemptionValue: string;
   streakAtMonthEnd: number;
   bestWeek: string;
   comparedToPriorMonth: string;
@@ -84,7 +86,8 @@ export function MonthlySummary({
   userName,
   missesCount,
   penaltiesCharged,
-  rewardsEarned,
+  onusPoints,
+  onusPointsRedemptionValue,
   streakAtMonthEnd,
   bestWeek,
   comparedToPriorMonth,
@@ -123,7 +126,8 @@ export function MonthlySummary({
       sessionsTotal,
       missesCount,
       penaltiesCharged,
-      rewardsEarned,
+      onusPoints,
+      onusPointsRedemptionValue,
       streakAtMonthEnd,
       bestWeek,
       comparedToPriorMonth,
@@ -139,7 +143,8 @@ export function MonthlySummary({
     sessionsTotal,
     missesCount,
     penaltiesCharged,
-    rewardsEarned,
+    onusPoints,
+    onusPointsRedemptionValue,
     streakAtMonthEnd,
     bestWeek,
     comparedToPriorMonth,

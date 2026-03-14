@@ -1,19 +1,22 @@
 "use client";
 
-import type { Commitment, Tier } from "@/lib/types";
+import type { Commitment, Tier, TierPointsConfig } from "@/lib/types";
 
 interface ContractSummaryProps {
   commitment: Commitment;
   tiers: Tier[];
+  tierPointsConfig: Record<string, TierPointsConfig>;
   onConfirm: () => void;
 }
 
 export function ContractSummary({
   commitment,
   tiers,
+  tierPointsConfig,
   onConfirm,
 }: ContractSummaryProps) {
   const tier = tiers.find((t) => t.id === commitment.tierId);
+  const pointsConfig = tierPointsConfig[commitment.tierId];
 
   return (
     <div className="mx-auto max-w-lg rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-8">
@@ -48,6 +51,20 @@ export function ContractSummary({
           <p className="mt-1 font-mono text-[#f0efe8]">
             {commitment.graceSessionsRemaining} of {commitment.graceSessionsTotal}{" "}
             remaining
+          </p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
+            OnusPoints rate
+          </p>
+          <p className="mt-1 font-mono text-[#f0efe8]">
+            {pointsConfig?.pointsRate ?? 0}× (up to{" "}
+            {pointsConfig?.pointsCapPerMonth.toLocaleString() ?? "—"} pts/mo)
+          </p>
+        </div>
+        <div>
+          <p className="text-xs text-[rgba(240,239,232,0.45)]">
+            First redemption unlocks at 500 pts (~$5 value)
           </p>
         </div>
       </div>

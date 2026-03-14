@@ -8,7 +8,7 @@ import { GoalBuilder } from "@/components/onboarding/GoalBuilder";
 import { ContractSummary } from "@/components/onboarding/ContractSummary";
 import { MOCK_COMMITMENT, MOCK_AI_RECOMMENDED_TIER_ID } from "@/lib/mock-data";
 import { createCommitment } from "@/app/actions/create-commitment";
-import type { Tier, TierId } from "@/lib/types";
+import type { Tier, TierId, TierPointsConfig } from "@/lib/types";
 
 const STEPS = ["Set your goal", "Choose your tier", "Commitment contract"];
 const MOCK_WHY =
@@ -16,9 +16,10 @@ const MOCK_WHY =
 
 interface OnboardingClientProps {
   tiers: Tier[];
+  tierPointsConfig: Record<string, TierPointsConfig>;
 }
 
-export function OnboardingClient({ tiers }: OnboardingClientProps) {
+export function OnboardingClient({ tiers, tierPointsConfig }: OnboardingClientProps) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [selectedTierId, setSelectedTierId] = useState<TierId | null>(
@@ -100,6 +101,7 @@ export function OnboardingClient({ tiers }: OnboardingClientProps) {
             </p>
             <TierSelect
               tiers={tiers}
+              tierPointsConfig={tierPointsConfig}
               selectedId={selectedTierId}
               onSelect={(id) => setSelectedTierId(id as TierId)}
               recommendedId={MOCK_AI_RECOMMENDED_TIER_ID}
@@ -136,6 +138,7 @@ export function OnboardingClient({ tiers }: OnboardingClientProps) {
             <ContractSummary
               commitment={commitment}
               tiers={tiers}
+              tierPointsConfig={tierPointsConfig}
               onConfirm={handleConfirm}
             />
             <div className="mt-6 flex justify-start">

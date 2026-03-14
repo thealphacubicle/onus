@@ -28,7 +28,9 @@ interface DashboardContentProps {
   sessionsThisWeek: number;
   sessionsGoal: number;
   penaltiesCharged: number;
-  rewardsEarned: number;
+  onusPoints: number;
+  pointsEarnedThisMonth: number;
+  pointsCap: number;
   weekDays: DayData[];
   commitment: Commitment;
   tiers: Tier[];
@@ -40,7 +42,9 @@ export function DashboardContent({
   sessionsThisWeek,
   sessionsGoal,
   penaltiesCharged,
-  rewardsEarned,
+  onusPoints,
+  pointsEarnedThisMonth,
+  pointsCap,
   weekDays,
   commitment,
   tiers,
@@ -58,7 +62,7 @@ export function DashboardContent({
             sessionsThisWeek={sessionsThisWeek}
             sessionsGoal={sessionsGoal}
             penaltiesCharged={penaltiesCharged}
-            rewardsEarned={rewardsEarned}
+            onusPoints={onusPoints}
           />
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
             <WeekView
@@ -70,6 +74,8 @@ export function DashboardContent({
               commitment={commitment}
               tiers={tiers}
               canCheckIn={hasToday}
+              pointsEarnedThisMonth={pointsEarnedThisMonth}
+              pointsCap={pointsCap}
             />
           </div>
         </main>

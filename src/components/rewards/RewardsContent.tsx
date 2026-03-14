@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
 import { RewardIcon } from "@/components/rewards/RewardIcons";
@@ -12,17 +13,27 @@ import {
 import { Gift } from "lucide-react";
 
 interface RewardsContentProps {
-  rewardBalance: number;
+  onusPoints: number;
+  pointsToNextRedemption: number;
+  onusPointsRedemptionValue: number;
   userName: string;
   streak: number;
 }
 
 export function RewardsContent({
-  rewardBalance,
+  onusPoints,
+  pointsToNextRedemption,
+  onusPointsRedemptionValue,
   userName,
   streak,
 }: RewardsContentProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const handleRedeem = (pts: number, dollarValue: number) => {
+    toast.success(
+      `${pts.toLocaleString()} pts redeemed — $${dollarValue.toFixed(2)} credit incoming. Check your email within 24 hours.`
+    );
+  };
 
   return (
     <div className="flex min-h-screen bg-[#0e0e10]">
@@ -32,7 +43,7 @@ export function RewardsContent({
         <main className="flex-1 p-6">
           <h1 className="text-2xl font-semibold text-[#f0efe8]">Rewards</h1>
           <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
-            Earn rewards when you show up. Redeem for discounts and gear.
+            Earn OnusPoints when you show up. Redeem for discounts and gear.
             Functionality coming soon.
           </p>
 
@@ -46,11 +57,49 @@ export function RewardsContent({
                 <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
                   Your balance
                 </p>
-                <p className="font-mono text-3xl font-medium text-[#c8f060]">
-                  ${rewardBalance.toFixed(2)}
+                <p className="font-mono text-[36px] font-medium text-[#c8f060]">
+                  {onusPoints.toLocaleString()} pts
                 </p>
+                <p className="mt-1 text-base text-[rgba(240,239,232,0.45)]">
+                  ${onusPointsRedemptionValue.toFixed(2)} redemption value
+                </p>
+                <div className="mt-3 flex items-center justify-between gap-4">
+                  <span className="text-xs text-[rgba(240,239,232,0.45)]">
+                    Next redemption
+                  </span>
+                  <span
+                    className={
+                      onusPoints >= 500
+                        ? "text-xs font-medium text-[#c8f060]"
+                        : "text-xs text-[rgba(240,239,232,0.45)]"
+                    }
+                  >
+                    {onusPoints >= 500
+                      ? "Ready to redeem"
+                      : `${pointsToNextRedemption.toLocaleString()} pts to go`}
+                  </span>
+                </div>
+                <div
+                  className="mt-2 h-[3px] w-full overflow-hidden rounded-[99px]"
+                  style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                >
+                  <div
+                    className="h-full rounded-[99px] bg-[#c8f060]"
+                    style={{
+                      width: `${Math.min(100, (onusPoints % 500 / 500) * 100)}%`,
+                    }}
+                  />
+                </div>
               </div>
             </div>
+          </div>
+
+          {/* Redemption minimum notice */}
+          <div className="mt-4 rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">
+            <p className="text-sm text-[rgba(240,239,232,0.7)]">
+              Minimum redemption is 500 points ($5.00 value). Points expire
+              after 12 months of inactivity.
+            </p>
           </div>
 
           {/* Redemption categories */}
@@ -111,9 +160,20 @@ export function RewardsContent({
                           </div>
                           <button
                             type="button"
+                            onClick={() =>
+                              handleRedeem(
+                                category.minPts ?? 500,
+                                category.minPtsDollarValue ?? 5
+                              )
+                            }
                             className="group w-full rounded-lg bg-[#c8f060] py-2.5 font-medium text-[#0e0e10] transition-all hover:bg-[#1a1a1d] hover:text-[#c8f060]"
                           >
-                            <span className="group-hover:hidden">Redeem now</span>
+                            <span className="group-hover:hidden">
+                              Redeem {(category.minPts ?? 500).toLocaleString()}{" "}
+                              pts → $
+                              {(category.minPtsDollarValue ?? 5).toFixed(0)}{" "}
+                              credit
+                            </span>
                             <span className="hidden group-hover:inline text-[#c8f060]">
                               Integration coming soon!
                             </span>
@@ -136,10 +196,19 @@ export function RewardsContent({
                               <button
                                 key={partner}
                                 type="button"
+                                onClick={() =>
+                                  handleRedeem(
+                                    category.minPts ?? 500,
+                                    category.minPtsDollarValue ?? 5
+                                  )
+                                }
                                 className="group w-full rounded-lg bg-[#c8f060] py-2.5 font-medium text-[#0e0e10] transition-all hover:bg-[#1a1a1d] hover:text-[#c8f060]"
                               >
                                 <span className="group-hover:hidden">
-                                  Redeem with {partner}
+                                  Redeem {(category.minPts ?? 500).toLocaleString()}{" "}
+                                  pts → $
+                                  {(category.minPtsDollarValue ?? 5).toFixed(0)}{" "}
+                                  credit
                                 </span>
                                 <span className="hidden group-hover:inline text-[#c8f060]">
                                   Integration coming soon!

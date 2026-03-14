@@ -81,7 +81,8 @@ export function PartnerScrollSection() {
           Rewards you can actually use
         </h2>
         <p className="mt-2 text-[15px] text-[rgba(240,239,232,0.6)]">
-          Show up consistently. Watch the rewards add up.
+          Show up consistently. Earn OnusPoints redeemable with our partners —
+          gear, memberships, supplements, and more.
         </p>
 
         <div className="relative mt-10 overflow-hidden">
@@ -162,7 +163,7 @@ export function PartnerScrollSection() {
                 </div>
                 <div className="space-y-1">
                   <h4 className="text-xs font-medium uppercase tracking-wider text-[rgba(240,239,232,0.5)]">
-                    How rewards work
+                    How OnusPoints work
                   </h4>
                   <p className="text-[17px] leading-relaxed text-[rgba(240,239,232,0.85)]">
                     {selectedPartner.rewards}

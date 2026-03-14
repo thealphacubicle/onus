@@ -6,14 +6,19 @@ interface PaktCardProps {
   commitment: Commitment;
   tiers: Tier[];
   canCheckIn?: boolean;
+  pointsEarnedThisMonth?: number;
+  pointsCap?: number;
 }
 
 export function PaktCard({
   commitment,
   tiers,
   canCheckIn = true,
+  pointsEarnedThisMonth = 0,
+  pointsCap = 749,
 }: PaktCardProps) {
   const tier = tiers.find((t) => t.id === commitment.tierId);
+  const progressPercent = pointsCap > 0 ? Math.min(100, (pointsEarnedThisMonth / pointsCap) * 100) : 0;
 
   return (
     <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">
@@ -35,6 +40,19 @@ export function PaktCard({
           <span className="text-[rgba(240,239,232,0.45)]">Grace sessions:</span>{" "}
           {commitment.graceSessionsRemaining} remaining
         </p>
+        <p className="font-mono text-sm text-[#f0efe8]">
+          <span className="text-[rgba(240,239,232,0.45)]">Points this month:</span>{" "}
+          {pointsEarnedThisMonth.toLocaleString()} / {pointsCap.toLocaleString()} pts
+        </p>
+        <div
+          className="mt-2 h-[3px] w-full overflow-hidden rounded-[99px]"
+          style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+        >
+          <div
+            className="h-full rounded-[99px] bg-[#c8f060]"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
       </div>
       {canCheckIn && (
         <p className="mt-6 text-center text-sm text-[rgba(240,239,232,0.6)]">

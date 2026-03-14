@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Tier } from "@/lib/types";
+import type { Tier, TierPointsConfig } from "@/lib/types";
 
 export interface PricingTierDetail {
   id: string;
@@ -40,6 +40,9 @@ interface TierRow {
   cta_text: string;
   cta_variant: string;
   selectable: boolean;
+  points_rate?: number | null;
+  points_cap_per_month?: number | null;
+  points_cap_dollar_value?: number | null;
 }
 
 function rowToTier(row: TierRow): Tier {
@@ -121,4 +124,41 @@ function getFallbackTiers(): {
 export async function getSelectableTiers(): Promise<Tier[]> {
   const { tiers } = await getTiers();
   return tiers;
+}
+
+export async function getTierPointsConfig(): Promise<Record<string, TierPointsConfig>> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("tiers")
+      .select("id, points_rate, points_cap_per_month, points_cap_dollar_value");
+
+    if (error || !data?.length) {
+      return getFallbackTierPointsConfig();
+    }
+
+    const config: Record<string, TierPointsConfig> = {};
+    for (const row of data as { id: string; points_rate?: number | null; points_cap_per_month?: number | null; points_cap_dollar_value?: number | null }[]) {
+      if (row.points_rate != null && row.points_cap_per_month != null && row.points_cap_dollar_value != null) {
+        config[row.id] = {
+          pointsRate: Number(row.points_rate),
+          pointsCapPerMonth: Number(row.points_cap_per_month),
+          pointsCapDollarValue: Number(row.points_cap_dollar_value),
+        };
+      }
+    }
+    return Object.keys(config).length > 0 ? config : getFallbackTierPointsConfig();
+  } catch {
+    return getFallbackTierPointsConfig();
+  }
+}
+
+function getFallbackTierPointsConfig(): Record<string, TierPointsConfig> {
+  const { TIER_POINTS_CONFIG } = require("@/lib/mock-data");
+  const config: Record<string, TierPointsConfig> = {};
+  for (const [key, val] of Object.entries(TIER_POINTS_CONFIG)) {
+    const dbKey = key === "onusOne" ? "onus_one" : key;
+    config[dbKey] = val as TierPointsConfig;
+  }
+  return config;
 }

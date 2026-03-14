@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { RewardsContent } from "@/components/rewards/RewardsContent";
+import { MOCK_ONUS_POINTS, MOCK_POINTS_TO_NEXT_REDEMPTION } from "@/lib/mock-data";
 
 function getMonday(date: Date): Date {
   const d = new Date(date);
@@ -19,7 +20,8 @@ export default async function RewardsPage() {
     return null;
   }
 
-  let rewardBalance = 0;
+  let onusPoints = MOCK_ONUS_POINTS;
+  let pointsToNextRedemption = MOCK_POINTS_TO_NEXT_REDEMPTION;
   let userName = user.email?.split("@")[0] ?? "there";
   let streak = 0;
 
@@ -46,7 +48,10 @@ export default async function RewardsPage() {
     ]);
 
     if (commitRes.data?.reward_balance != null) {
-      rewardBalance = Number(commitRes.data.reward_balance);
+      const pts = Math.round(Number(commitRes.data.reward_balance));
+      onusPoints = pts;
+      pointsToNextRedemption =
+        pts >= 500 ? 500 - (pts % 500) : 500 - pts;
     }
 
     if (profileRes.data?.full_name) {
@@ -78,9 +83,13 @@ export default async function RewardsPage() {
     // Fallback to zero
   }
 
+  const onusPointsRedemptionValue = (onusPoints / 100).toFixed(2);
+
   return (
     <RewardsContent
-      rewardBalance={rewardBalance}
+      onusPoints={onusPoints}
+      pointsToNextRedemption={pointsToNextRedemption}
+      onusPointsRedemptionValue={parseFloat(onusPointsRedemptionValue)}
       userName={userName}
       streak={streak}
     />

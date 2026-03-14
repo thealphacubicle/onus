@@ -23,7 +23,8 @@ interface InsightsContentProps {
     sessionsTotal: number;
     missesCount: number;
     penaltiesCharged: number;
-    rewardsEarned: number;
+    onusPoints: number;
+    onusPointsRedemptionValue: string;
     streakAtMonthEnd: number;
     bestWeek: string;
     comparedToPriorMonth: string;

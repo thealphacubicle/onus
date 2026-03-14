@@ -46,7 +46,8 @@ export default async function InsightsPage() {
           userName={userName}
           missesCount={monthlySummaryContext.missesCount}
           penaltiesCharged={monthlySummaryContext.penaltiesCharged}
-          rewardsEarned={monthlySummaryContext.rewardsEarned}
+          onusPoints={monthlySummaryContext.onusPoints}
+          onusPointsRedemptionValue={monthlySummaryContext.onusPointsRedemptionValue}
           streakAtMonthEnd={monthlySummaryContext.streakAtMonthEnd}
           bestWeek={monthlySummaryContext.bestWeek}
           comparedToPriorMonth={monthlySummaryContext.comparedToPriorMonth}

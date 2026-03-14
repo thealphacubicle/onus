@@ -25,7 +25,7 @@ export function PaktCard({
 
   return (
     <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">
-      <h3 className="font-medium text-[#f0efe8]">Your Pakt</h3>
+      <h3 className="font-medium text-[#f0efe8]">Your Commitment</h3>
       <div className="mt-4 space-y-2">
         <p className="text-sm text-[rgba(240,239,232,0.8)]">
           <span className="text-[rgba(240,239,232,0.45)]">Tier:</span>{" "}

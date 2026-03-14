@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { ProfileContent } from "@/components/profile/ProfileContent";
+import { getSelectableTiers } from "@/lib/tiers";
 import type { Commitment } from "@/lib/types";
 
 function getMonday(date: Date): Date {
@@ -55,6 +56,8 @@ export default async function ProfilePage() {
   let commitment: Commitment = toUiCommitment(null);
   let streak = 0;
   let paymentMethods: { id: string; last4: string; brand: string; exp_month: number; exp_year: number }[] = [];
+
+  const tiers = await getSelectableTiers();
 
   try {
     const [profileRes, commitRes, sessionsRes, paymentMethodsRes] =
@@ -123,6 +126,7 @@ export default async function ProfilePage() {
       fullName={fullName}
       email={email}
       commitment={commitment}
+      tiers={tiers}
       streak={streak}
       paymentMethods={paymentMethods}
     />

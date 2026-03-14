@@ -46,7 +46,7 @@ export default function PricingPage() {
                   ${tier.penaltyPerMiss} penalty per miss
                 </p>
                 <Link
-                  href="/onboarding"
+                  href="/login"
                   className="mt-6 block w-full rounded-lg border border-[rgba(255,255,255,0.12)] bg-transparent py-2.5 text-center text-sm font-medium text-[#f0efe8] transition-colors hover:bg-[#131315]"
                 >
                   Get started

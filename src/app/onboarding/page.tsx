@@ -6,10 +6,17 @@ import Link from "next/link";
 import { TierSelect } from "@/components/onboarding/TierSelect";
 import { GoalBuilder } from "@/components/onboarding/GoalBuilder";
 import { ContractSummary } from "@/components/onboarding/ContractSummary";
-import { TIERS, MOCK_COMMITMENT, MOCK_AI_RECOMMENDED_TIER_ID } from "@/lib/mock-data";
+import {
+  TIERS,
+  MOCK_COMMITMENT,
+  MOCK_AI_RECOMMENDED_TIER_ID,
+} from "@/lib/mock-data";
+import { createCommitment } from "@/app/actions/create-commitment";
 import type { TierId } from "@/lib/types";
 
 const STEPS = ["Set your goal", "Choose your tier", "Commitment contract"];
+const MOCK_WHY =
+  "I want to feel stronger and have more energy. My job is sedentary and I'm tired of feeling sluggish.";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -17,9 +24,22 @@ export default function OnboardingPage() {
   const [selectedTierId, setSelectedTierId] = useState<TierId | null>(
     MOCK_AI_RECOMMENDED_TIER_ID as TierId
   );
+  const [confirmError, setConfirmError] = useState<string | null>(null);
 
-  const handleConfirm = () => {
-    router.push("/dashboard");
+  const handleConfirm = async () => {
+    if (!selectedTierId) return;
+    setConfirmError(null);
+    const result = await createCommitment({
+      tier: selectedTierId,
+      goal_frequency: commitment.sessionsPerWeek,
+      goal_description: commitment.goal,
+      penalty_amount: commitment.penaltyPerMiss,
+      grace_sessions_total: commitment.graceSessionsTotal,
+      why: MOCK_WHY,
+    });
+    if (result?.error === "auth_required") {
+      router.push("/login?redirect=/onboarding");
+    }
   };
 
   const commitment = selectedTierId
@@ -103,6 +123,9 @@ export default function OnboardingPage() {
 
         {step === 2 && (
           <div className="mt-8">
+            {confirmError && (
+              <p className="mb-4 text-sm text-[#f07070]">{confirmError}</p>
+            )}
             <ContractSummary commitment={commitment} onConfirm={handleConfirm} />
             <div className="mt-6 flex justify-start">
               <button

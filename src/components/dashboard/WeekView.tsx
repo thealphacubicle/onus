@@ -13,14 +13,28 @@ interface DayData {
 interface WeekViewProps {
   days: DayData[];
   canCheckIn?: boolean;
+  onCheckIn?: () => void;
 }
 
-export function WeekView({ days, canCheckIn }: WeekViewProps) {
+export function WeekView({
+  days,
+  canCheckIn,
+  onCheckIn,
+}: WeekViewProps) {
   return (
     <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">
       <div className="flex items-center justify-between">
         <h3 className="font-medium text-[#f0efe8]">This week</h3>
-        {canCheckIn && (
+        {canCheckIn && onCheckIn && (
+          <button
+            type="button"
+            onClick={onCheckIn}
+            className="rounded-lg bg-[#c8f060] px-4 py-2 text-sm font-medium text-[#0e0e10] transition-opacity hover:opacity-90"
+          >
+            Check in today
+          </button>
+        )}
+        {canCheckIn && !onCheckIn && (
           <p className="text-sm text-[rgba(240,239,232,0.6)]">
             Check in via the app
           </p>

@@ -21,7 +21,7 @@ export default function LandingPage() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/onboarding"
+              href="/login"
               className="inline-block rounded-lg bg-[#c8f060] px-8 py-3.5 text-base font-medium text-[#0e0e10] transition-opacity hover:opacity-90"
             >
               Get started
@@ -72,8 +72,8 @@ export default function LandingPage() {
                   2. Verify
                 </h3>
                 <p className="mt-3 text-[rgba(240,239,232,0.7)]">
-                  Check in after each session. Simple, fast, no gym selfies
-                  required. We trust you — but the penalty keeps you honest.
+                  Use the app to check-in after each session. Fool-proof. Uses
+                  geolocation technology to make you accountable.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
@@ -134,7 +134,7 @@ export default function LandingPage() {
                     ${tier.penaltyPerMiss} penalty per miss
                   </p>
                   <Link
-                    href="/onboarding"
+                    href="/login"
                     className="mt-6 block w-full rounded-lg border border-[rgba(255,255,255,0.12)] bg-transparent py-2.5 text-center text-sm font-medium text-[#f0efe8] transition-colors hover:bg-[#131315]"
                   >
                     Get started
@@ -155,7 +155,7 @@ export default function LandingPage() {
               Join thousands who show up because the stakes are real.
             </p>
             <Link
-              href="/onboarding"
+              href="/login"
               className="mt-8 inline-block rounded-lg bg-[#c8f060] px-8 py-3.5 text-base font-medium text-[#0e0e10] transition-opacity hover:opacity-90"
             >
               Sign up

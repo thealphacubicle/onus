@@ -5,7 +5,6 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
 import { StatsRow } from "@/components/dashboard/StatsRow";
 import { WeekView } from "@/components/dashboard/WeekView";
-import { CoachingCard } from "@/components/dashboard/CoachingCard";
 import { PaktCard } from "@/components/dashboard/PaktCard";
 import {
   Dialog,
@@ -15,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { DayStatus } from "@/components/dashboard/WeekView";
-import type { Commitment, Tier } from "@/lib/types";
+import type { Commitment, Tier, TierPointsConfig } from "@/lib/types";
 
 interface DayData {
   date: string;
@@ -29,11 +28,13 @@ interface DashboardContentProps {
   sessionsThisWeek: number;
   sessionsGoal: number;
   penaltiesCharged: number;
-  rewardsEarned: number;
+  onusPoints: number;
+  pointsEarnedThisMonth: number;
+  pointsCap: number;
   weekDays: DayData[];
   commitment: Commitment;
   tiers: Tier[];
-  coachingMessage: string;
+  tierPointsConfig?: Record<string, TierPointsConfig>;
 }
 
 export function DashboardContent({
@@ -42,11 +43,13 @@ export function DashboardContent({
   sessionsThisWeek,
   sessionsGoal,
   penaltiesCharged,
-  rewardsEarned,
+  onusPoints,
+  pointsEarnedThisMonth,
+  pointsCap,
   weekDays,
   commitment,
   tiers,
-  coachingMessage,
+  tierPointsConfig = {},
 }: DashboardContentProps) {
   const [checkInOpen, setCheckInOpen] = useState(false);
   const hasToday = weekDays.some((d) => d.status === "today");
@@ -61,7 +64,7 @@ export function DashboardContent({
             sessionsThisWeek={sessionsThisWeek}
             sessionsGoal={sessionsGoal}
             penaltiesCharged={penaltiesCharged}
-            rewardsEarned={rewardsEarned}
+            onusPoints={onusPoints}
           />
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
             <WeekView
@@ -69,13 +72,13 @@ export function DashboardContent({
               canCheckIn={hasToday}
               onCheckIn={() => setCheckInOpen(true)}
             />
-            <CoachingCard message={coachingMessage} />
-          </div>
-          <div className="mt-6">
             <PaktCard
               commitment={commitment}
               tiers={tiers}
+              tierPointsConfig={tierPointsConfig}
               canCheckIn={hasToday}
+              pointsEarnedThisMonth={pointsEarnedThisMonth}
+              pointsCap={pointsCap}
             />
           </div>
         </main>

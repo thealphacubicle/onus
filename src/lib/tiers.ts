@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Tier } from "@/lib/types";
+import type { Tier, TierPointsConfig } from "@/lib/types";
 
 export interface PricingTierDetail {
   id: string;
@@ -40,6 +40,9 @@ interface TierRow {
   cta_text: string;
   cta_variant: string;
   selectable: boolean;
+  points_rate?: number | null;
+  points_cap_per_month?: number | null;
+  points_cap_dollar_value?: number | null;
 }
 
 function rowToTier(row: TierRow): Tier {
@@ -107,18 +110,111 @@ export async function getTiers(): Promise<{
   }
 }
 
+const AI_COACHING_LABELS: Record<string, string> = {
+  goal_builder_only: "Goal builder only",
+  weekly: "Weekly coaching",
+  daily: "Daily coaching",
+  daily_plus_insights: "Daily + insights + habit stacking",
+};
+
 function getFallbackTiers(): {
   tiers: Tier[];
   pricingDetails: PricingTierDetail[];
 } {
-  const { TIERS, PRICING_TIER_DETAILS } = require("@/lib/mock-data");
-  return {
-    tiers: TIERS,
-    pricingDetails: PRICING_TIER_DETAILS,
+  const { TIERS } = require("@/lib/mock-data");
+  const tierOrder = ["starter", "committed", "dedicated"] as const;
+  const tierDescriptions: Record<string, string> = {
+    starter:
+      "For building the habit. Low stakes to start — but the commitment is still real.",
+    committed:
+      "For people ready to stop making excuses. Earn OnusPoints on every session you show up for.",
+    dedicated:
+      "For when you're done playing around. Earn OnusPoints at the highest standard rate.",
   };
+  const tiers: Tier[] = tierOrder.map((id) => {
+    const t = TIERS[id];
+    return {
+      id,
+      name: t.name,
+      priceMonthly: t.price,
+      penaltyPerMiss: t.penalty,
+      firstMonthFree: t.firstMonthFree,
+      graceSessions: t.graceSessions,
+      pointsRate: t.pointsRate,
+      pointsCapPerMonth: t.pointsCapPerMonth,
+      pointsCapDollarValue: t.pointsCapDollarValue,
+      aiCoaching: t.aiCoaching,
+      weeklyCheckin: t.weeklyCheckin,
+      monthlyReview: t.monthlyReview,
+      description: tierDescriptions[id],
+    };
+  });
+  const pricingDetails: PricingTierDetail[] = tierOrder.map((id) => {
+    const t = TIERS[id];
+    return {
+      id,
+      name: t.name,
+      priceMonthly: t.price,
+      penaltyPerMiss: t.penalty,
+      badge: id === "starter" ? "First month free" : id === "committed" ? "Most popular" : "Highest stakes",
+      badgeVariant: id === "starter" ? "green" : id === "committed" ? "blue" : "amber",
+      goalRange: id === "starter" ? "1–2 sessions/week" : id === "committed" ? "3–4 sessions/week" : "5–7 sessions/week",
+      graceSessions: `${t.graceSessions}/month`,
+      aiCoaching: AI_COACHING_LABELS[t.aiCoaching] ?? t.aiCoaching,
+      rewardRate: `${t.pointsRate}× OnusPoints`,
+      rewardCap: `${t.pointsCapPerMonth.toLocaleString()} pts ($${t.pointsCapDollarValue.toFixed(2)} value)`,
+      weeklyCheckIn: t.weeklyCheckin,
+      monthlyReview: t.monthlyReview,
+      onusOneEligible: "Yes — after 180 days",
+      ctaText: id === "starter" ? "Try free" : "Get started",
+      ctaVariant: "accent",
+    };
+  });
+  return { tiers, pricingDetails };
 }
 
 export async function getSelectableTiers(): Promise<Tier[]> {
   const { tiers } = await getTiers();
   return tiers;
+}
+
+export async function getTierPointsConfig(): Promise<Record<string, TierPointsConfig>> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("tiers")
+      .select("id, points_rate, points_cap_per_month, points_cap_dollar_value");
+
+    if (error || !data?.length) {
+      return getFallbackTierPointsConfig();
+    }
+
+    const config: Record<string, TierPointsConfig> = {};
+    for (const row of data as { id: string; points_rate?: number | null; points_cap_per_month?: number | null; points_cap_dollar_value?: number | null }[]) {
+      if (row.points_rate != null && row.points_cap_per_month != null && row.points_cap_dollar_value != null) {
+        config[row.id] = {
+          pointsRate: Number(row.points_rate),
+          pointsCapPerMonth: Number(row.points_cap_per_month),
+          pointsCapDollarValue: Number(row.points_cap_dollar_value),
+        };
+      }
+    }
+    return Object.keys(config).length > 0 ? config : getFallbackTierPointsConfig();
+  } catch {
+    return getFallbackTierPointsConfig();
+  }
+}
+
+function getFallbackTierPointsConfig(): Record<string, TierPointsConfig> {
+  const { TIERS } = require("@/lib/mock-data");
+  const config: Record<string, TierPointsConfig> = {};
+  for (const [key, t] of Object.entries(TIERS)) {
+    const tier = t as { pointsRate: number; pointsCapPerMonth: number; pointsCapDollarValue: number };
+    config[key] = {
+      pointsRate: tier.pointsRate,
+      pointsCapPerMonth: tier.pointsCapPerMonth,
+      pointsCapDollarValue: tier.pointsCapDollarValue,
+    };
+  }
+  return config;
 }

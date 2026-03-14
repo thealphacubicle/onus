@@ -3,6 +3,7 @@ import { updateSession } from "@/lib/supabase/middleware";
 
 const PROTECTED_ROUTES = [
   "/dashboard",
+  "/insights",
   "/history",
   "/rewards",
   "/onboarding",
@@ -10,12 +11,13 @@ const PROTECTED_ROUTES = [
   "/add-payment",
 ];
 
+// Onboarding does NOT require payment — user selects plan first, then add-payment after commit
 const ROUTES_REQUIRING_PAYMENT = [
   "/dashboard",
+  "/insights",
   "/history",
   "/rewards",
   "/profile",
-  "/onboarding",
 ];
 
 function isProtected(pathname: string) {

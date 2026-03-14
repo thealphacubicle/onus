@@ -1,25 +1,46 @@
-import type { TierId } from "../types";
+export type TierName = "starter" | "committed" | "dedicated" | "onus_one";
 
-export interface Profile {
+export interface TierConfig {
+  name: string;
+  price: number;
+  firstMonthFree: boolean;
+  penalty: number;
+  pointsRate: number;
+  pointsCapPerMonth: number;
+  pointsCapDollarValue: number;
+  graceSessions: number;
+  aiCoaching: string;
+  weeklyCheckin: boolean;
+  monthlyReview: boolean;
+  dailyCoaching: boolean;
+  communityAccess: boolean;
+  onusOneEligible: boolean;
+  earnedOnly?: boolean;
+  poolFunded?: boolean;
+}
+
+export interface UserProfile {
   id: string;
-  email: string | null;
-  full_name: string | null;
+  email: string;
+  full_name: string;
   created_at: string;
 }
 
 export interface Commitment {
   id: string;
   user_id: string;
-  tier: TierId;
+  tier: TierName;
   goal_frequency: number;
   goal_description: string | null;
   penalty_amount: number;
   grace_sessions_remaining: number;
   grace_sessions_total: number;
-  reward_balance: number;
+  onus_points?: number;
+  onus_points_cap?: number;
   active: boolean;
   created_at: string;
   why: string | null;
+  reward_balance?: number;
 }
 
 export interface Session {
@@ -32,6 +53,8 @@ export interface Session {
   missed: boolean;
   penalty_charged: number;
   grace_used: boolean;
+  points_earned?: number;
+  comeback_bonus?: boolean;
   created_at: string;
 }
 
@@ -42,6 +65,8 @@ export interface Penalty {
   amount: number;
   charged_at: string;
   refunded: boolean;
+  points_to_pool?: number;
+  ai_reflection?: string | null;
 }
 
 export interface PaymentMethod {
@@ -58,9 +83,9 @@ export interface Database {
   public: {
     Tables: {
       profiles: {
-        Row: Profile;
-        Insert: Omit<Profile, "created_at"> & { created_at?: string };
-        Update: Partial<Omit<Profile, "id">>;
+        Row: UserProfile;
+        Insert: Omit<UserProfile, "created_at"> & { created_at?: string };
+        Update: Partial<Omit<UserProfile, "id">>;
       };
       commitments: {
         Row: Commitment;

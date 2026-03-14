@@ -101,4 +101,7 @@
   html {
     @apply font-sans;
   }
+  .font-serif {
+    font-family: var(--font-serif), Georgia, serif;
+  }
 }

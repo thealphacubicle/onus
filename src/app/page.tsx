@@ -56,7 +56,7 @@ export default function LandingPage() {
                 <div className="flex gap-3">
                   <div className="mt-0.5 h-4 w-1 shrink-0 rounded bg-[#b45309]" />
                   <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                    2× permanent reward rate — the highest of any tier
+                    2× OnusPoints · 1,798 pts/mo cap
                   </p>
                 </div>
                 <div className="flex gap-3">
@@ -80,7 +80,7 @@ export default function LandingPage() {
                 <div className="flex gap-3">
                   <div className="mt-0.5 h-4 w-1 shrink-0 rounded bg-[#b45309]" />
                   <p className="text-sm text-[rgba(240,239,232,0.8)]">
-                    $4.50/month — the least you&apos;ll ever pay on Onus
+                    $8.99/month — the least you&apos;ll ever pay on Onus
                   </p>
                 </div>
               </div>
@@ -95,7 +95,7 @@ export default function LandingPage() {
                 </p>
                 <p className="text-sm text-[#c8f060]">days</p>
                 <p className="mt-4 text-sm text-[rgba(240,239,232,0.8)]">
-                  Reward rate 2× · Grace 5/mo · $4.50/mo
+                  2× OnusPoints · 1,798 pts/mo cap
                 </p>
                 <p className="mt-4 text-sm italic text-[rgba(240,239,232,0.45)]">
                   Earned. Not purchased.

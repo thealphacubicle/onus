@@ -1,20 +1,24 @@
 "use client";
 
 import { Lock } from "lucide-react";
-import type { Tier } from "@/lib/types";
+import type { PricingTierDetail } from "@/lib/tiers";
+import type { Tier, TierPointsConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface TierSelectProps {
   tiers: Tier[];
+  pricingDetails: PricingTierDetail[];
+  tierPointsConfig: Record<string, TierPointsConfig>;
   selectedId: string | null;
   onSelect: (id: string) => void;
   recommendedId?: string | null;
 }
 
-export function TierSelect({ tiers, selectedId, onSelect, recommendedId }: TierSelectProps) {
+export function TierSelect({ tiers, pricingDetails, tierPointsConfig, selectedId, onSelect, recommendedId }: TierSelectProps) {
   return (
     <div className="grid grid-cols-2 gap-8">
       {tiers.map((tier) => {
+        const detail = pricingDetails.find((d) => d.id === tier.id);
         const isRecommended = recommendedId === tier.id;
         return (
           <button
@@ -52,6 +56,13 @@ export function TierSelect({ tiers, selectedId, onSelect, recommendedId }: TierS
             <p className="mt-2 font-mono text-sm text-[#f07070]">
               ${tier.penaltyPerMiss} penalty per miss
             </p>
+            {detail && (
+              <div className="mt-2 space-y-1 text-[11px] text-[rgba(240,239,232,0.45)]">
+                <p>
+                  Earn rate: {detail.rewardRate} · Cap: {detail.rewardCap}
+                </p>
+              </div>
+            )}
           </button>
         );
       })}
@@ -62,7 +73,14 @@ export function TierSelect({ tiers, selectedId, onSelect, recommendedId }: TierS
       >
         <h3 className="font-medium text-[#f0efe8]">Onus One</h3>
         <p className="mt-1 text-center text-sm text-[rgba(240,239,232,0.6)]">
-          $4.50/mo · 2× rewards · 5 grace sessions/month
+          {tierPointsConfig["onus_one"] ? (
+            <>
+              {tierPointsConfig["onus_one"].pointsRate}× OnusPoints ·{" "}
+              {tierPointsConfig["onus_one"].pointsCapPerMonth.toLocaleString()} pts/mo cap
+            </>
+          ) : (
+            "2× OnusPoints · 1,798 pts/mo cap"
+          )}
         </p>
         <div className="mt-6 flex flex-col items-center">
           <Lock className="size-10 text-[#b45309]" strokeWidth={1.5} />

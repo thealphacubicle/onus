@@ -1,4 +1,4 @@
-export type TierId = "starter" | "committed" | "dedicated";
+export type TierId = "starter" | "committed" | "dedicated" | "onus_one";
 
 export interface Tier {
   id: TierId;
@@ -6,7 +6,14 @@ export interface Tier {
   priceMonthly: number;
   penaltyPerMiss: number;
   firstMonthFree?: boolean;
-  description: string;
+  graceSessions?: number;
+  pointsRate?: number;
+  pointsCapPerMonth?: number;
+  pointsCapDollarValue?: number;
+  aiCoaching?: string;
+  weeklyCheckin?: boolean;
+  monthlyReview?: boolean;
+  description?: string;
 }
 
 export interface User {
@@ -46,6 +53,7 @@ export interface WeekSummary {
   sessionsCompleted: number;
   sessionsMissed: number;
   penaltiesCharged: number;
+  missedDays?: string[];
 }
 
 export interface RedemptionOption {
@@ -53,7 +61,14 @@ export interface RedemptionOption {
   name: string;
   description: string;
   cost: number;
+  costInPoints?: number;
   type: "discount" | "credit" | "partner";
+}
+
+export interface TierPointsConfig {
+  pointsRate: number;
+  pointsCapPerMonth: number;
+  pointsCapDollarValue: number;
 }
 
 export type RewardCategoryIcon = "gym" | "penalty" | "supplements" | "devices" | "gift";
@@ -65,4 +80,6 @@ export interface RewardCategory {
   icon: RewardCategoryIcon;
   partners: string[] | null;
   ctaText?: string;
+  minPts?: number;
+  minPtsDollarValue?: number;
 }

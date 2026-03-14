@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
+import { BehavioralScienceViz } from "@/components/science/BehavioralScienceViz";
 
 export default function HowItWorksPage() {
   return (
@@ -76,15 +77,80 @@ export default function HowItWorksPage() {
                       Miss it? You pay.
                     </h2>
                     <p className="mt-3 text-[rgba(240,239,232,0.7)]">
-                      A penalty hits your card automatically. No grace, no
-                      renegotiating — unless you&apos;ve earned a grace session.
-                      Stick to your commitment and rewards accumulate toward
-                      your membership, gear, and more.
+                      Miss it? You pay. Show up? You earn. Every session you
+                      complete earns OnusPoints — redeemable for gym discounts,
+                      supplements, smart devices, and gift cards. 100 points =
+                      $1. The more consistent you are, the faster they add up.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* OnusPoints callout */}
+        <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#0e0e10] py-20">
+          <div className="mx-auto max-w-2xl px-6">
+            <div
+              className="border-0 border-l-2 border-[#c8f060] bg-[#1a1a1d] p-6"
+              style={{ borderRadius: 0 }}
+            >
+              <p className="text-[11px] font-medium uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
+                How OnusPoints work
+              </p>
+              <div className="mt-4 space-y-4">
+                <div className="flex gap-4">
+                  <span className="font-mono text-lg font-medium text-[#c8f060] shrink-0">
+                    1
+                  </span>
+                  <p className="text-sm text-[rgba(240,239,232,0.8)]">
+                    Earn points every session you complete — rate depends on your
+                    tier (0.5× to 2×)
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <span className="font-mono text-lg font-medium text-[#c8f060] shrink-0">
+                    2
+                  </span>
+                  <p className="text-sm text-[rgba(240,239,232,0.8)]">
+                    Points cap at your subscription value each month — up to
+                    2,249 pts on Dedicated
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <span className="font-mono text-lg font-medium text-[#c8f060] shrink-0">
+                    3
+                  </span>
+                  <p className="text-sm text-[rgba(240,239,232,0.8)]">
+                    500 points = $5.00 — your first redemption threshold
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <span className="font-mono text-lg font-medium text-[#c8f060] shrink-0">
+                    4
+                  </span>
+                  <p className="text-sm text-[rgba(240,239,232,0.8)]">
+                    Missed a session? Show up next time for 2× points — the
+                    comeback bonus
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* The science behind it */}
+        <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#0e0e10] py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <h2 className="text-center text-2xl font-semibold text-[#f0efe8]">
+              The science behind it
+            </h2>
+            <p className="mx-auto mt-2 max-w-2xl text-center text-[rgba(240,239,232,0.7)]">
+              Onus is built on two of the most validated principles in behavioral
+              economics.
+            </p>
+            <BehavioralScienceViz />
           </div>
         </section>
 

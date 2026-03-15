@@ -39,7 +39,7 @@ export default async function PricingPage({
 
       <main className="pt-16">
         {/* Hero */}
-        <section className="mx-auto max-w-4xl px-6 py-20 text-center">
+        <section className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6">
           <h1 className="text-3xl font-bold tracking-tight text-[#f0efe8] sm:text-4xl">
             Pick your level of accountability
           </h1>
@@ -50,8 +50,8 @@ export default async function PricingPage({
 
         {/* Pricing cards — 2×2 grid */}
         <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#0e0e10] py-20">
-          <div className="mx-auto max-w-4xl px-6">
-            <div className="grid grid-cols-2 gap-8">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
               {SELECTABLE_TIERS.map((id) => {
                 const tier = TIERS[id];
                 const badge = BADGES[id];
@@ -135,12 +135,12 @@ export default async function PricingPage({
                 );
               })}
               {/* Onus One card — not selectable */}
-              <div className="rounded-[10px] border border-[rgba(180,83,9,0.6)] bg-[#1a1a1d] p-6">
+              <div className="rounded-[10px] border border-[#c8f060]/60 bg-[#1a1a1d] p-6">
                 <div className="flex items-start justify-between">
                   <h2 className="text-lg font-medium text-[#f0efe8]">
                     Onus One
                   </h2>
-                  <span className="rounded-md bg-[#fef3c7] px-2 py-0.5 text-xs font-medium text-[#92400e]">
+                  <span className="rounded-md bg-[#c8f060]/20 px-2 py-0.5 text-xs font-medium text-[#c8f060]">
                     Earned, not bought
                   </span>
                 </div>
@@ -155,23 +155,12 @@ export default async function PricingPage({
                 <p className="mt-1 text-xs text-[rgba(240,239,232,0.45)]">
                   Earned after 180 days
                 </p>
-                <div className="mt-4 rounded-md bg-[#fef3c7] p-3">
-                  <p className="text-xs font-medium text-[#92400e]">
-                    Status accountability
-                  </p>
-                  <p className="mt-0.5 text-sm font-medium text-[#92400e]">
-                    No per-session penalty
-                  </p>
-                  <p className="mt-0.5 text-xs text-[#92400e]">
-                    5 missed goals = demotion
-                  </p>
-                </div>
                 <div className="mt-4 space-y-2 text-sm text-[rgba(240,239,232,0.7)]">
                   <p>
                     <span className="text-[rgba(240,239,232,0.45)]">
                       Grace sessions:
                     </span>{" "}
-                    <span className="text-[#b45309] font-medium">
+                    <span className="font-medium text-[#c8f060]">
                       5/month
                     </span>
                   </p>
@@ -179,7 +168,7 @@ export default async function PricingPage({
                     <span className="text-[rgba(240,239,232,0.45)]">
                       Earn rate:
                     </span>{" "}
-                    <span className="text-[#b45309] font-medium">
+                    <span className="font-medium text-[#c8f060]">
                       2× OnusPoints
                     </span>
                   </p>
@@ -236,7 +225,7 @@ export default async function PricingPage({
 
         {/* Feature comparison table */}
         <section className="border-t border-[rgba(255,255,255,0.07)] bg-[#131315] py-20">
-          <div className="mx-auto max-w-5xl overflow-x-auto px-6">
+          <div className="mx-auto max-w-5xl overflow-x-auto px-4 sm:px-6">
             <table className="w-full min-w-[600px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-[rgba(255,255,255,0.07)]">

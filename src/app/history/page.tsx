@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Navbar } from "@/components/layout/Navbar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { HistoryTableClient } from "@/components/history/HistoryTableClient";
 import type { WeekSummary } from "@/lib/types";
 
@@ -198,25 +197,19 @@ export default async function HistoryPage() {
   } = await getHistoryData(user.id);
 
   return (
-    <div className="flex min-h-screen bg-[#0e0e10]">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Navbar variant="dashboard" userName={userName} streak={streak} />
-        <main className="flex-1 p-6">
-          <h1 className="text-2xl font-semibold text-[#f0efe8]">History</h1>
-          <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
-            Your past weeks and penalties
-          </p>
-          <div className="mt-6 min-w-0">
-            <HistoryTableClient
-              history={history}
-              userName={userName}
-              goalFrequency={goalFrequency}
-              missesThisMonth={missesThisMonth}
-            />
-          </div>
-        </main>
+    <DashboardLayout userName={userName} streak={streak}>
+      <h1 className="text-2xl font-semibold text-[#f0efe8]">History</h1>
+      <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
+        Your past weeks and penalties
+      </p>
+      <div className="mt-6 min-w-0 overflow-x-auto">
+        <HistoryTableClient
+          history={history}
+          userName={userName}
+          goalFrequency={goalFrequency}
+          missesThisMonth={missesThisMonth}
+        />
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

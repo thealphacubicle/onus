@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Navbar } from "@/components/layout/Navbar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatsRow } from "@/components/dashboard/StatsRow";
 import { WeekView } from "@/components/dashboard/WeekView";
 import { PaktCard } from "@/components/dashboard/PaktCard";
@@ -55,33 +54,27 @@ export function DashboardContent({
   const hasToday = weekDays.some((d) => d.status === "today");
 
   return (
-    <div className="flex min-h-screen bg-[#0e0e10]">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Navbar variant="dashboard" userName={userName} streak={streak} />
-        <main className="flex-1 p-6">
-          <StatsRow
-            sessionsThisWeek={sessionsThisWeek}
-            sessionsGoal={sessionsGoal}
-            penaltiesCharged={penaltiesCharged}
-            onusPoints={onusPoints}
-          />
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            <WeekView
-              days={weekDays}
-              canCheckIn={hasToday}
-              onCheckIn={() => setCheckInOpen(true)}
-            />
-            <PaktCard
-              commitment={commitment}
-              tiers={tiers}
-              tierPointsConfig={tierPointsConfig}
-              canCheckIn={hasToday}
-              pointsEarnedThisMonth={pointsEarnedThisMonth}
-              pointsCap={pointsCap}
-            />
-          </div>
-        </main>
+    <DashboardLayout userName={userName} streak={streak}>
+      <StatsRow
+        sessionsThisWeek={sessionsThisWeek}
+        sessionsGoal={sessionsGoal}
+        penaltiesCharged={penaltiesCharged}
+        onusPoints={onusPoints}
+      />
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <WeekView
+          days={weekDays}
+          canCheckIn={hasToday}
+          onCheckIn={() => setCheckInOpen(true)}
+        />
+        <PaktCard
+          commitment={commitment}
+          tiers={tiers}
+          tierPointsConfig={tierPointsConfig}
+          canCheckIn={hasToday}
+          pointsEarnedThisMonth={pointsEarnedThisMonth}
+          pointsCap={pointsCap}
+        />
       </div>
 
       <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}>
@@ -100,6 +93,6 @@ export function DashboardContent({
           </p>
         </DialogContent>
       </Dialog>
-    </div>
+    </DashboardLayout>
   );
 }

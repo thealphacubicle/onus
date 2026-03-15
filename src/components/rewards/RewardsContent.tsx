@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Navbar } from "@/components/layout/Navbar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { RewardIcon } from "@/components/rewards/RewardIcons";
 import {
   MOCK_PENALTY_BALANCE,
@@ -36,12 +35,8 @@ export function RewardsContent({
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0e0e10]">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Navbar variant="dashboard" userName={userName} streak={streak} />
-        <main className="flex-1 p-6">
-          <h1 className="text-2xl font-semibold text-[#f0efe8]">Rewards</h1>
+    <DashboardLayout userName={userName} streak={streak}>
+      <h1 className="text-2xl font-semibold text-[#f0efe8]">Rewards</h1>
           <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
             Earn OnusPoints when you show up. Redeem for discounts and gear.
             Functionality coming soon.
@@ -57,7 +52,7 @@ export function RewardsContent({
                 <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
                   Your balance
                 </p>
-                <p className="font-mono text-[36px] font-medium text-[#c8f060]">
+                <p className="font-mono text-2xl font-medium text-[#c8f060] sm:text-[36px]">
                   {onusPoints.toLocaleString()} pts
                 </p>
                 <p className="mt-1 text-base text-[rgba(240,239,232,0.45)]">
@@ -234,8 +229,6 @@ export function RewardsContent({
               );
             })}
           </div>
-        </main>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }

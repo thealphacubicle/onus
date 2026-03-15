@@ -100,8 +100,8 @@ export function HistoryTableClient({
   };
 
   return (
-    <div className="min-w-0 overflow-hidden rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d]">
-      <Table className="table-fixed">
+    <div className="min-w-0 overflow-x-auto rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d]">
+      <Table className="min-w-[400px] table-fixed">
         <TableHeader>
           <TableRow className="border-[rgba(255,255,255,0.07)] hover:bg-transparent">
             <TableHead className="w-10" />

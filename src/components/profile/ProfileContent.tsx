@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Navbar } from "@/components/layout/Navbar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import type { Commitment, Tier } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -146,16 +145,8 @@ export function ProfileContent({
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0e0e10]">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Navbar
-          variant="dashboard"
-          userName={firstName}
-          streak={streak}
-        />
-        <main className="flex-1 p-6">
-          <h1 className="text-2xl font-semibold text-[#f0efe8]">Profile</h1>
+    <DashboardLayout userName={firstName} streak={streak}>
+      <h1 className="text-2xl font-semibold text-[#f0efe8]">Profile</h1>
           <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
             Your account details
           </p>
@@ -428,8 +419,6 @@ export function ProfileContent({
               </Dialog>
             </div>
           </div>
-        </main>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }

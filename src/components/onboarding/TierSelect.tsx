@@ -16,7 +16,7 @@ interface TierSelectProps {
 
 export function TierSelect({ tiers, pricingDetails, tierPointsConfig, selectedId, onSelect, recommendedId }: TierSelectProps) {
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
       {tiers.map((tier) => {
         const detail = pricingDetails.find((d) => d.id === tier.id);
         const isRecommended = recommendedId === tier.id;

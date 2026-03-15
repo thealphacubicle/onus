@@ -11,7 +11,7 @@ export default function LandingPage() {
         {/* Hero */}
         <section className="mx-auto max-w-4xl px-6 py-24 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-[#f0efe8] sm:text-5xl md:text-6xl">
-            Show up. Or pay up.
+            <span className="text-[#c8f060]">Show up.</span> Or pay up.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-[rgba(240,239,232,0.7)]">
             You know you should go. You just don&apos;t. Onus puts real money on

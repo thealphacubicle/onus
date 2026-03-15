@@ -29,7 +29,7 @@ export function WeekView({
           <button
             type="button"
             onClick={onCheckIn}
-            className="rounded-lg bg-[#c8f060] px-4 py-2 text-sm font-medium text-[#0e0e10] transition-opacity hover:opacity-90"
+            className="rounded-lg bg-[#c8f060] px-4 py-2.5 text-sm font-medium text-[#0e0e10] transition-opacity hover:opacity-90 sm:py-2"
           >
             Check in today
           </button>

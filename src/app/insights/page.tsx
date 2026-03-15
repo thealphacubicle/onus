@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Navbar } from "@/components/layout/Navbar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { InsightsContent } from "@/components/dashboard/InsightsContent";
 import { MonthlySummary } from "@/components/dashboard/MonthlySummary";
 import { getInsightsData } from "@/lib/insights-data";
@@ -36,7 +35,7 @@ export default async function InsightsPage() {
   const isDedicated = (tierId ?? "").toString().toLowerCase() === "dedicated";
 
   return (
-    <div className="flex min-h-screen bg-[#0e0e10]">
+    <DashboardLayout userName={userName} streak={streak}>
       {monthlySummaryContext && isDedicated && (
         <MonthlySummary
           month={monthlySummaryContext.month}
@@ -54,31 +53,25 @@ export default async function InsightsPage() {
           isFirstMonth={monthlySummaryContext.isFirstMonth}
         />
       )}
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Navbar variant="dashboard" userName={userName} streak={streak} />
-        <main className="flex-1 p-6">
-          <h1 className="text-2xl font-semibold text-[#f0efe8]">Insights</h1>
-          <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
-            AI-powered coaching and reviews based on your tier
-          </p>
-          <div className="mt-8">
-            <InsightsContent
-              tierId={tierId}
-              tierName={tierName}
-              coachingMessage={coachingMessage}
-              coachingGeneratedDate={coachingGeneratedDate}
-              monthlySummaryContext={monthlySummaryContext}
-              weeksConsistent={weeksConsistent}
-              graceSessionsUsed={graceSessionsUsed}
-              nextTier={nextTier}
-              nextTierPenalty={nextTierPenalty}
-              nextTierRewardRate={nextTierRewardRate}
-              userName={userName}
-            />
-          </div>
-        </main>
+      <h1 className="text-2xl font-semibold text-[#f0efe8]">Insights</h1>
+      <p className="mt-1 text-sm text-[rgba(240,239,232,0.6)]">
+        AI-powered coaching and reviews based on your tier
+      </p>
+      <div className="mt-8">
+        <InsightsContent
+          tierId={tierId}
+          tierName={tierName}
+          coachingMessage={coachingMessage}
+          coachingGeneratedDate={coachingGeneratedDate}
+          monthlySummaryContext={monthlySummaryContext}
+          weeksConsistent={weeksConsistent}
+          graceSessionsUsed={graceSessionsUsed}
+          nextTier={nextTier}
+          nextTierPenalty={nextTierPenalty}
+          nextTierRewardRate={nextTierRewardRate}
+          userName={userName}
+        />
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

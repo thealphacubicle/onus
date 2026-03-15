@@ -16,7 +16,7 @@ export function StatsRow({
   const redemptionValue = (onusPoints / 100).toFixed(2);
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
       <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-4">
         <p className="text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
           Sessions this week

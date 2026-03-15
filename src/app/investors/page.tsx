@@ -5,9 +5,9 @@ import { InvestorFAQ } from "@/components/investors/InvestorFAQ";
 export default function InvestorsPage() {
   return (
     <div className="min-h-screen bg-[#0e0e10]">
-      <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         {/* Section 1 — Hero */}
-        <section className="pb-12">
+        <section className="pb-10">
           <p className="font-mono text-xs uppercase tracking-wider text-[rgba(240,239,232,0.45)]">
             ONUS / INVESTOR OVERVIEW
           </p>
@@ -18,7 +18,7 @@ export default function InvestorsPage() {
             HackHealth 2026 — Full financial model, business case, and Q&A
             below.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-6 flex flex-wrap gap-4">
             <Link
               href="https://onus-kappa.vercel.app"
               target="_blank"
@@ -28,11 +28,11 @@ export default function InvestorsPage() {
               View live product →
             </Link>
           </div>
-          <div className="mt-8 h-px bg-[#c8f060]" />
+          <div className="mt-6 h-px bg-[#c8f060]" />
         </section>
 
         {/* Section 2 — Key metrics bar */}
-        <section className="py-16">
+        <section className="py-10">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
               <p className="font-mono text-xl font-medium text-[#c8f060]">
@@ -78,17 +78,17 @@ export default function InvestorsPage() {
         </section>
 
         {/* Section 3 — KPI Dashboard */}
-        <section className="border-t border-[rgba(255,255,255,0.07)] py-16">
-          <h2 className="mb-8 text-2xl font-semibold text-[#f0efe8]">
+        <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
+          <h2 className="mb-6 text-2xl font-semibold text-[#f0efe8]">
             Interactive KPI dashboard
           </h2>
-          <div className="rounded-xl border border-[rgba(255,255,255,0.09)] bg-[#111113] p-6 lg:p-8">
+          <div className="rounded-xl border border-[rgba(255,255,255,0.09)] bg-[#111113] p-6">
             <InvestorKPIDashboard />
           </div>
         </section>
 
         {/* Section 4 — Business model narrative */}
-        <section className="border-t border-[rgba(255,255,255,0.07)] py-16">
+        <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
           <div className="grid gap-6 md:grid-cols-3">
             <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#1a1a1d] p-6">
               <h3 className="font-medium text-[#f0efe8]">
@@ -128,11 +128,11 @@ export default function InvestorsPage() {
         </section>
 
         {/* Section 5 — Market opportunity */}
-        <section className="border-t border-[rgba(255,255,255,0.07)] py-16">
-          <h2 className="mb-8 text-2xl font-semibold text-[#f0efe8]">
+        <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
+          <h2 className="mb-6 text-2xl font-semibold text-[#f0efe8]">
             The opportunity
           </h2>
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-2">
             <div className="space-y-4">
               <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-6">
                 <p className="font-mono text-2xl font-medium text-[#c8f060]">
@@ -172,7 +172,7 @@ export default function InvestorsPage() {
                 zero financial consequence for quitting. Onus introduces the
                 missing variable: real stakes.
               </p>
-              <div className="mt-6 flex flex-wrap gap-6">
+              <div className="mt-4 flex flex-wrap gap-6">
                 <div>
                   <p className="font-mono text-lg font-medium text-[#c8f060]">
                     50%
@@ -196,8 +196,8 @@ export default function InvestorsPage() {
         </section>
 
         {/* Section 6 — Competitive positioning */}
-        <section className="border-t border-[rgba(255,255,255,0.07)] py-16">
-          <h2 className="mb-8 text-2xl font-semibold text-[#f0efe8]">
+        <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
+          <h2 className="mb-6 text-2xl font-semibold text-[#f0efe8]">
             Why Onus wins
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
@@ -242,20 +242,20 @@ export default function InvestorsPage() {
         </section>
 
         {/* Section 7 — FAQ */}
-        <section className="border-t border-[rgba(255,255,255,0.07)] py-16">
+        <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
           <h2 className="text-2xl font-semibold text-[#f0efe8]">
             Common questions
           </h2>
           <p className="mt-2 text-sm text-[rgba(240,239,232,0.45)]">
             The questions we expect — and our answers.
           </p>
-          <div className="mt-8">
+          <div className="mt-6">
             <InvestorFAQ />
           </div>
         </section>
 
         {/* Section 8 — Footer */}
-        <footer className="border-t border-[rgba(255,255,255,0.07)] py-8">
+        <footer className="border-t border-[rgba(255,255,255,0.07)] py-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <span className="text-sm font-medium text-[#f0efe8]">
               Onus — HackHealth 2026

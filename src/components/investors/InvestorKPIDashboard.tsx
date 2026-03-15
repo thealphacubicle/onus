@@ -209,7 +209,7 @@ export function InvestorKPIDashboard() {
     `$${n.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#0e0e10] p-5">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="shrink-0">
@@ -409,7 +409,7 @@ export function InvestorKPIDashboard() {
         </button>
         {assumptionsOpen && (
           <div className="border-t border-[rgba(255,255,255,0.07)] px-6 py-4">
-            <div className="grid gap-8 text-xs sm:grid-cols-3">
+            <div className="grid gap-6 text-xs sm:grid-cols-3">
               <div>
                 <p className="mb-2 font-mono font-medium text-[rgba(240,239,232,0.45)]">
                   Pricing tiers + user mix

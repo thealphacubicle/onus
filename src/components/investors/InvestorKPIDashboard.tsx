@@ -80,8 +80,8 @@ function computeMetrics(users: number) {
   const margin =
     grossRevenue > 0 ? (netRevenue / grossRevenue) * 100 : 0;
 
-  const mrr = subRevenue;
-  const arr = subRevenue * 12;
+  const mrr = netRevenue;
+  const arr = netRevenue * 12;
   const arpu = users > 0 ? grossRevenue / users : 0;
 
   return {
@@ -116,9 +116,20 @@ const TIER_COLORS = {
   onusOne: "#b45309",
 } as const;
 
-export function InvestorKPIDashboard() {
-  const [users, setUsers] = useState(1000);
+interface InvestorKPIDashboardProps {
+  users?: number;
+  onUsersChange?: (users: number) => void;
+}
+
+export function InvestorKPIDashboard({ users: controlledUsers, onUsersChange }: InvestorKPIDashboardProps = {}) {
+  const [internalUsers, setInternalUsers] = useState(1000);
   const [isAnnual, setIsAnnual] = useState(false);
+
+  const users = controlledUsers ?? internalUsers;
+  const setUsers = (n: number) => {
+    setInternalUsers(n);
+    onUsersChange?.(n);
+  };
   const [assumptionsOpen, setAssumptionsOpen] = useState(false);
 
   const metrics = useMemo(() => computeMetrics(users), [users]);
@@ -357,13 +368,13 @@ export function InvestorKPIDashboard() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-          <p className="text-xs text-[rgba(240,239,232,0.45)]">MRR</p>
+          <p className="text-xs text-[rgba(240,239,232,0.45)]">Net MRR</p>
           <p className="font-mono text-lg font-medium text-[#c8f060]">
             {formatCurrency(metrics.mrr)}
           </p>
         </div>
         <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-          <p className="text-xs text-[rgba(240,239,232,0.45)]">ARR</p>
+          <p className="text-xs text-[rgba(240,239,232,0.45)]">Net ARR</p>
           <p className="font-mono text-lg font-medium text-[#c8f060]">
             {formatCurrency(metrics.arr)}
           </p>

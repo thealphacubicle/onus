@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { InvestorKPIDashboard } from "@/components/investors/InvestorKPIDashboard";
+import { InvestorInteractiveSection } from "@/components/investors/InvestorInteractiveSection";
 import { InvestorFAQ } from "@/components/investors/InvestorFAQ";
 
 export default function InvestorsPage() {
@@ -31,61 +31,8 @@ export default function InvestorsPage() {
           <div className="mt-6 h-px bg-[#c8f060]" />
         </section>
 
-        {/* Section 2 — Key metrics bar */}
-        <section className="py-10">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-              <p className="font-mono text-xl font-medium text-[#c8f060]">
-                $21K
-              </p>
-              <p className="mt-0.5 text-xs text-[rgba(240,239,232,0.45)]">
-                MRR at 1,000 users
-              </p>
-            </div>
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-              <p className="font-mono text-xl font-medium text-[#c8f060]">
-                $254K
-              </p>
-              <p className="mt-0.5 text-xs text-[rgba(240,239,232,0.45)]">
-                ARR at 1,000 users
-              </p>
-            </div>
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-              <p className="font-mono text-xl font-medium text-[#c8f060]">
-                $23.47
-              </p>
-              <p className="mt-0.5 text-xs text-[rgba(240,239,232,0.45)]">
-                Blended ARPU
-              </p>
-            </div>
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-              <p className="font-mono text-xl font-medium text-[#c8f060]">
-                90%
-              </p>
-              <p className="mt-0.5 text-xs text-[rgba(240,239,232,0.45)]">
-                Profit margin
-              </p>
-            </div>
-            <div className="rounded-[10px] border border-[rgba(255,255,255,0.07)] bg-[#131315] p-4">
-              <p className="font-mono text-xl font-medium text-[#c8f060]">
-                77M
-              </p>
-              <p className="mt-0.5 text-xs text-[rgba(240,239,232,0.45)]">
-                US gym members (HFA 2024)
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 3 — KPI Dashboard */}
-        <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
-          <h2 className="mb-6 text-2xl font-semibold text-[#f0efe8]">
-            Interactive KPI dashboard
-          </h2>
-          <div className="rounded-xl border border-[rgba(255,255,255,0.09)] bg-[#111113] p-6">
-            <InvestorKPIDashboard />
-          </div>
-        </section>
+        {/* Sections 2 & 3 — Live metrics bar + KPI Dashboard (shared slider state) */}
+        <InvestorInteractiveSection />
 
         {/* Section 4 — Business model narrative */}
         <section className="border-t border-[rgba(255,255,255,0.07)] py-10">
